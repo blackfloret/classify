@@ -5,11 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import kotlin.concurrent.timer
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val ARG_PARAM1 = "duration"
+private const val ARG_PARAM2 = "listener"
 
 /**
  * A simple [Fragment] subclass.
@@ -18,15 +21,11 @@ private const val ARG_PARAM2 = "param2"
  */
 class MeditationFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    var minutesDuration: Int = 0
+    var listener: MeditationListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
@@ -34,7 +33,51 @@ class MeditationFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_meditation, container, false)
+        val view = inflater.inflate(R.layout.fragment_meditation, container, false)
+        val endButton: Button = view.findViewById(R.id.stop_meditation_button)
+        endButton.setOnClickListener {
+            listener?.endMeditation(0)
+        }
+        val timerText : TextView = view.findViewById(R.id.meditation_timer)
+        val instructionText: TextView = view.findViewById(R.id.meditation_instruction)
+        val goal = minutesDuration.times(60)
+        var elapsed = 0
+        var state = 0
+        timerText.text = convertToMinutesSeconds(elapsed)
+
+        timer(period = 1000) {
+            elapsed++
+            if(elapsed % 4 == 0) {
+                state++
+                state %= 4
+                getActivity()?.runOnUiThread {
+                    when(state) {
+                        0 -> instructionText.text = getString(R.string.inhale)
+                        1 -> instructionText.text = getString(R.string.hold)
+                        2 -> instructionText.text = getString(R.string.exhale)
+                        3 -> instructionText.text = getString(R.string.hold)
+                    }
+                }
+
+            }
+            getActivity()?.runOnUiThread {
+                timerText.text = convertToMinutesSeconds(goal-elapsed)
+            }
+        }
+
+
+        return view
+    }
+
+    fun convertToMinutesSeconds(secondsDuration: Int) : String {
+        val minutes = secondsDuration/60
+        val seconds = secondsDuration%60
+        val minutesString: String = minutes.toString()
+        var secondsString: String = seconds.toString()
+        if(seconds < 10) {
+            secondsString = "0" + secondsString
+        }
+        return "$minutesString:$secondsString"
     }
 
     companion object {
@@ -42,18 +85,15 @@ class MeditationFragment : Fragment() {
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
          * @return A new instance of fragment MeditationFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MeditationFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        fun newInstance(duration: Int, listener: MeditationListener): MeditationFragment {
+            val meditationFragment = MeditationFragment()
+            meditationFragment.minutesDuration = duration
+            meditationFragment.listener = listener
+            return meditationFragment
+        }
     }
 }
