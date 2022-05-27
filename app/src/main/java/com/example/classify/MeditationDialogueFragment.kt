@@ -5,6 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import java.time.Duration
+
+interface MeditationListener {
+    fun endMeditation(duration: Int)
+    fun startMeditation(duration: Int)
+}
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -18,15 +26,10 @@ private const val ARG_PARAM2 = "param2"
  */
 class MeditationDialogueFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    var listener: MeditationListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
@@ -34,7 +37,20 @@ class MeditationDialogueFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_meditation_dialogue, container, false)
+        val view = inflater.inflate(R.layout.fragment_meditation_dialogue, container, false)
+        val oneMinuteButton: Button = view.findViewById(R.id.one_minute)
+        oneMinuteButton.setOnClickListener {
+            listener?.startMeditation(1)
+        }
+        val threeMinuteButton: Button = view.findViewById(R.id.three_minutes)
+        threeMinuteButton.setOnClickListener {
+            listener?.startMeditation(3)
+        }
+        val fiveMinuteButton: Button = view.findViewById(R.id.five_minutes)
+        fiveMinuteButton.setOnClickListener {
+            listener?.startMeditation(5)
+        }
+        return view
     }
 
     companion object {
@@ -43,17 +59,14 @@ class MeditationDialogueFragment : Fragment() {
          * this fragment using the provided parameters.
          *
          * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
          * @return A new instance of fragment MeditationDialogueFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MeditationDialogueFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        fun newInstance(param1: MeditationListener) : MeditationDialogueFragment {
+            val meditationDialogueFragment = MeditationDialogueFragment()
+            meditationDialogueFragment.listener = param1
+            return meditationDialogueFragment
+        }
     }
 }
