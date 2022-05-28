@@ -1,20 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/item_number"
+        android:id="@+id/todo_name"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:text="First Exam"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/press_start_2p"
+        android:maxLines="1"/>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/date_pic"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_below="@+id/todo_name"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="7dp"
+            android:src="@drawable/pixel_clock"/>
+
+        <TextView
+            android:id="@+id/todo_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/date_pic"
+            android:layout_below="@+id/todo_name"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="10dp"
+            android:gravity="center"
+            android:text="May 23, 2015"
+            android:textSize="16sp"
+            android:fontFamily="@font/press_start_2p"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/comment_pic"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_below="@+id/todo_date"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="7dp"
+            android:src="@drawable/pixel_comment"/>
+
+        <TextView
+            android:id="@+id/todo_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/comment_pic"
+            android:layout_below="@+id/todo_date"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="10dp"
+            android:gravity="center"
+            android:text="Comment about assignment goes here"
+            android:textSize="16sp"
+            android:fontFamily="@font/press_start_2p"/>
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:id="@+id/border"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_alignParentBottom="true"
+        android:background="#808080"/>
 </LinearLayout>

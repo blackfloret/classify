@@ -4,7 +4,11 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.time.LocalDate
 
 // Canvas API Reference: https://canvas.instructure.com/doc/api/index.html
@@ -19,7 +23,7 @@ class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null
         TODO("Not yet implemented")
     }
 
-    // Insert a todo into the database
+    // Insert TodoData info into the database
     fun insert(todo: ToDoData) {
         // onCreate() returns a ref to writableDatabase
         // We need to translate this: INSERT INTO CHUCK VALUES("foobar")
@@ -59,17 +63,46 @@ class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null
 }
 
 
-class ScheduleActivity : AppCompatActivity() {
+class ScheduleActivity : AppCompatActivity(), OnItemClicked {
+    lateinit var recycler: RecyclerView
+    lateinit var adapter: MyTodoListRecyclerViewAdapter
+    lateinit var listfrag: TodoListFragment
+    // lateinit var dialfrag: EnterTodoFragment
+
     // Create a list of todos
     // remember that companion objects create static class variables
     companion object {
-        var TODO_LIST: MutableList<ToDoData> = mutableListOf()
+        var TODO_LIST: MutableList<ToDoData> = mutableListOf(
+            ToDoData("Task", LocalDate.of(2021, 12,22), 7, 30, "comment here", 1),
+            ToDoData("Exam", LocalDate.of(2022, 6,17), 21, 20, "comment here", 2),
+        )
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d("schedule activity", "before onCreate()")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_schedule)
 
+        Log.d("schedule activity", "started the recycler")
+        recycler = findViewById(R.id.TodoFrag)
+        adapter = MyTodoListRecyclerViewAdapter(TODO_LIST)
+        adapter.onClick = this
+        recycler.adapter = adapter
+        recycler.layoutManager = LinearLayoutManager(this)
+        Log.d("schedule activity", "inflated the recycler")
+
+        val fab: FloatingActionButton = findViewById(R.id.fab)
+        fab.setOnClickListener {
+            Log.d("schedule activity", "fab clicked!")
+//            dialfrag = EnterWorkoutDialogFragment.newInstance("hi", "bye")
+//            dialfrag.show(supportFragmentManager, "Adding Workout")
+//            dialfrag.listener = this
+        }
+    }
+
+    override fun onItemClick(position: Int) {
+        // The onClick implementation of the RecyclerView item click
 
     }
 }

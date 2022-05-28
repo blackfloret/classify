@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.classify.ScheduleActivity.Companion.TODO_LIST
 import com.example.classify.placeholder.PlaceholderContent
 
 /**
@@ -16,6 +17,7 @@ import com.example.classify.placeholder.PlaceholderContent
 class TodoListFragment : Fragment() {
 
     private var columnCount = 1
+    lateinit var adapter: MyTodoListRecyclerViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +40,7 @@ class TodoListFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = MyTodoListRecyclerViewAdapter(PlaceholderContent.ITEMS)
+                adapter = MyTodoListRecyclerViewAdapter(TODO_LIST)
             }
         }
         return view
@@ -51,8 +53,9 @@ class TodoListFragment : Fragment() {
 
         // TODO: Customize parameter initialization
         @JvmStatic
-        fun newInstance(columnCount: Int) =
+        fun newInstance(columnCount: Int, adapt: MyTodoListRecyclerViewAdapter) =
             TodoListFragment().apply {
+                adapter = adapt
                 arguments = Bundle().apply {
                     putInt(ARG_COLUMN_COUNT, columnCount)
                 }
