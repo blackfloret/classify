@@ -74,17 +74,15 @@ class ScheduleActivity : AppCompatActivity(), OnItemClicked {
     companion object {
         var TODO_LIST: MutableList<ToDoData> = mutableListOf(
             ToDoData("Task", LocalDate.of(2021, 12,22), 7, 30, "comment here", 1),
-            ToDoData("Exam", LocalDate.of(2022, 6,17), 21, 20, "comment here", 2),
+            ToDoData("Exam", LocalDate.of(2022, 6,17), 21, 20, "eeeeeeeeeeeeeeeeeeeeeextreeeeeemly loooong text", 2),
         )
     }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d("schedule activity", "before onCreate()")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_schedule)
 
-        Log.d("schedule activity", "started the recycler")
         recycler = findViewById(R.id.TodoFrag)
         adapter = MyTodoListRecyclerViewAdapter(TODO_LIST)
         adapter.onClick = this
