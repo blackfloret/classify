@@ -63,11 +63,10 @@ class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null
 }
 
 
-class ScheduleActivity : AppCompatActivity(), OnItemClicked {
+class ScheduleActivity : AppCompatActivity(), OnItemClicked, EnterTodoListener {
     lateinit var recycler: RecyclerView
     lateinit var adapter: MyTodoListRecyclerViewAdapter
-    lateinit var listfrag: TodoListFragment
-    // lateinit var dialfrag: EnterTodoFragment
+    lateinit var dialfrag: EnterTodoDialogFragment
 
     // Create a list of todos
     // remember that companion objects create static class variables
@@ -83,9 +82,10 @@ class ScheduleActivity : AppCompatActivity(), OnItemClicked {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_schedule)
 
-        recycler = findViewById(R.id.TodoFrag)
         adapter = MyTodoListRecyclerViewAdapter(TODO_LIST)
         adapter.onClick = this
+
+        recycler = findViewById(R.id.TodoRecyler)
         recycler.adapter = adapter
         recycler.layoutManager = LinearLayoutManager(this)
         Log.d("schedule activity", "inflated the recycler")
@@ -93,14 +93,26 @@ class ScheduleActivity : AppCompatActivity(), OnItemClicked {
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener {
             Log.d("schedule activity", "fab clicked!")
-//            dialfrag = EnterWorkoutDialogFragment.newInstance("hi", "bye")
-//            dialfrag.show(supportFragmentManager, "Adding Workout")
-//            dialfrag.listener = this
+            dialfrag = EnterTodoDialogFragment.newInstance("hi","bye")
+            supportFragmentManager.beginTransaction().apply {
+                replace(R.id.TodoDialogFrag, dialfrag, "enter todo dialog frag")
+                commit()
+                Log.d("schedule activity", "enter todo inflated")
+            }
         }
     }
 
     override fun onItemClick(position: Int) {
         // The onClick implementation of the RecyclerView item click
+    }
 
+    override fun todoEntered(
+        localDate: LocalDate,
+        hour: Int,
+        minute: Int,
+        name: String,
+        comment: String
+    ) {
+        TODO("Not yet implemented")
     }
 }
