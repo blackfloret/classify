@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.os.Bundle
 import android.util.Log
+import android.view.View.INVISIBLE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -77,7 +78,6 @@ class ScheduleActivity : AppCompatActivity(), OnItemClicked, EnterTodoListener {
         )
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_schedule)
@@ -93,10 +93,12 @@ class ScheduleActivity : AppCompatActivity(), OnItemClicked, EnterTodoListener {
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener {
             Log.d("schedule activity", "fab clicked!")
-            dialfrag = EnterTodoDialogFragment.newInstance("hi","bye")
+            dialfrag = EnterTodoDialogFragment.newInstance(this)
             supportFragmentManager.beginTransaction().apply {
                 replace(R.id.TodoDialogFrag, dialfrag, "enter todo dialog frag")
                 commit()
+                recycler.setAdapter(null)
+                fab.visibility = INVISIBLE
                 Log.d("schedule activity", "enter todo inflated")
             }
         }

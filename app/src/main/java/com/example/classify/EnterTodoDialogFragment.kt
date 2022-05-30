@@ -4,13 +4,14 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.fragment.app.Fragment
 import java.time.LocalDate
 import java.util.*
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -36,18 +37,10 @@ interface EnterTodoListener {
  * create an instance of this fragment.
  */
 class EnterTodoDialogFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
     var listener: EnterTodoListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
@@ -58,49 +51,44 @@ class EnterTodoDialogFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_enter_todo_dialog, container, false)
 
         // DatePicker - Due date of task
-        val datePicker = view.findViewById<DatePicker>(R.id.calendarView)
-        val today = Calendar.getInstance()
-        datePicker.init(
-            today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH)
-        ) { view, year, month, day ->
-            localDate = LocalDate.of(year, month + 1, day)
-            Log.d("todo dialog", "date: $localDate")
+        val datePicker = view.findViewById<CalendarView>(R.id.calendarView)
+        datePicker.setOnDateChangeListener { CalendarView, i, i2, i3 ->
+            localDate = LocalDate.of(i, i2 + 1, i3)
+            Log.d("dialog frag", "date: $localDate")
         }
 
         // Time Picker - Begin time of task
-        val timePicker = view.findViewById<TimePicker>(R.id.timePicker)
-        timePicker.setIs24HourView(true)
-        timePicker.setOnTimeChangedListener {
-                timePicker, i, i2 ->
-                hour = i
-                minute = i2
-                Log.d("todo dialog", "Hours:$i, Minutes: $i2")
+        val timePicker = view.findViewById<TimePicker>(R.id.timeView)
+        timePicker.setOnTimeChangedListener { TimePicker, h, m ->
+                hour = h
+                minute = m
+                Log.d("dialog frag", "Time in Hours:$hour, Minutes: $minute")
         }
 
         // Entered Name - User entered name
         val enteredName = view.findViewById<EditText>(R.id.name_text)
-        enteredName.addTextChangedListener(object: TextWatcher {
-            override fun afterTextChanged(s: Editable) {}
+        enteredName.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+                name = s.toString()
+                Log.d("dialog frag", "name: $name")
+            }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                name = s.toString()
-                Log.d("todo dialog", "name: $name")
-            }
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
         })
 
         // Entered Comment - User entered comment
         val enteredComment = view.findViewById<EditText>(R.id.comment_text)
         enteredComment.addTextChangedListener(object: TextWatcher {
-            override fun afterTextChanged(s: Editable) {}
+            override fun afterTextChanged(s: Editable) {
+                comment = s.toString()
+                Log.d("dialog frag", "comment: $comment")
+            }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                comment = s.toString()
-                Log.d("todo dialog", "comment: $comment")
-            }
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
         })
 
         // Button - Finalize task
@@ -122,19 +110,19 @@ class EnterTodoDialogFragment : Fragment() {
          * @return A new instance of fragment EnterTodoDialogFragment.
          */
         // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            EnterTodoDialogFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
 //        @JvmStatic
-//        fun newInstance(param1: EnterTodoListener) : EnterTodoDialogFragment {
-//            val enterTodoDialogFrag = EnterTodoDialogFragment()
-//            enterTodoDialogFrag.listener = param1
-//            return enterTodoDialogFrag
-//        }
+//        fun newInstance(param1: String, param2: String) =
+//            EnterTodoDialogFragment().apply {
+//                arguments = Bundle().apply {
+//                    putString(ARG_PARAM1, param1)
+//                    putString(ARG_PARAM2, param2)
+//                }
+//            }
+        @JvmStatic
+        fun newInstance(param1: EnterTodoListener) : EnterTodoDialogFragment {
+            val enterTodoDialogFrag = EnterTodoDialogFragment()
+            enterTodoDialogFrag.listener = param1
+            return enterTodoDialogFrag
+        }
     }
 }
