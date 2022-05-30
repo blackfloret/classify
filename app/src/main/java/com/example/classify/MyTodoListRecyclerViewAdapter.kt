@@ -36,7 +36,12 @@ class MyTodoListRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
         holder.nameView.text = item.priority.toString() + ". " + item.name
-        holder.dateView.text = item.date.toString() + ", " + item.hour.toString() + ":" + item.minute.toString()
+        holder.dateView.text = item.date.toString()
+        if (item.hour > 12) {
+            holder.timeView.text = (item.hour - 12).toString() + ":" + item.minute + " PM"
+        } else {
+            holder.timeView.text = item.hour.toString() + ":" + item.minute + " AM"
+        }
         holder.commentView.text = item.comment
     }
 
@@ -45,6 +50,7 @@ class MyTodoListRecyclerViewAdapter(
     inner class ViewHolder(binding: TodoItemBinding) : RecyclerView.ViewHolder(binding.root) {
         val nameView: TextView = binding.todoName
         val dateView: TextView = binding.todoDate
+        val timeView: TextView = binding.todoTime
         val commentView: TextView = binding.todoComment
     }
 

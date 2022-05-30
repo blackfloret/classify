@@ -26,20 +26,21 @@
         />
 
     <ImageView
-        android:id="@+id/date_pic"
+        android:id="@+id/cal_pic"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginLeft="-2dp"
         android:layout_below="@id/todo_name"
         android:layout_toEndOf="@id/check_box"
         android:layout_toRightOf="@id/check_box"
-        android:src="@drawable/pixel_clock" />
+        android:src="@drawable/pixel_calendar_simple"
+        android:tint="@color/default_font_color"/>
 
     <TextView
         android:id="@+id/todo_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/date_pic"
+        android:layout_toEndOf="@+id/cal_pic"
         android:layout_below="@+id/todo_name"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="16dp"
@@ -50,20 +51,46 @@
         android:fontFamily="@font/press_start_2p" />
 
     <ImageView
+        android:id="@+id/clock_pic"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="-2dp"
+        android:layout_below="@id/todo_date"
+        android:layout_toEndOf="@id/check_box"
+        android:layout_toRightOf="@id/check_box"
+        android:src="@drawable/pixel_clock"
+        android:tint="@color/default_font_color"/>
+
+    <TextView
+        android:id="@+id/todo_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/clock_pic"
+        android:layout_below="@+id/todo_date"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="10dp"
+        android:gravity="center"
+        android:text="11:59 pm"
+        android:textSize="12sp"
+        android:fontFamily="@font/press_start_2p" />
+
+    <ImageView
         android:id="@+id/comment_pic"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginLeft="-2dp"
-        android:layout_below="@+id/todo_date"
+        android:layout_below="@+id/todo_time"
         android:layout_toEndOf="@id/check_box"
         android:layout_toRightOf="@id/check_box"
-        android:src="@drawable/pixel_comment" />
+        android:src="@drawable/pixel_comment"
+        android:tint="@color/default_font_color"/>
 
     <TextView
         android:id="@+id/todo_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/todo_date"
+        android:layout_below="@+id/todo_time"
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="16dp"

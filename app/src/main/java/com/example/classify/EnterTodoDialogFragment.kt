@@ -1,5 +1,6 @@
 package com.example.classify
 
+import android.graphics.Insets.add
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -24,11 +25,12 @@ var hour: Int = -1
 var minute: Int = -1
 var name: String = ""
 var comment: String = ""
+var priority: Int = -1
 
 // Define a listener interface for this fragment
 interface EnterTodoListener {
     // Listeners all implement this interface
-    fun todoEntered(localDate: LocalDate, hour: Int, minute: Int, name: String, comment: String)
+    fun todoEntered(localDate: LocalDate, hour: Int, minute: Int, name: String, comment: String, priority: Int)
 }
 
 /**
@@ -91,10 +93,33 @@ class EnterTodoDialogFragment : Fragment() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
         })
 
+        // Spinner - Set priority
+//        val spinner = view.findViewById<Spinner>(R.id.spinner)
+//        var todoPriorities = ArrayList<String>()
+//        for (i in 1..todoCount) {
+//            todoPriorities.add("$i")
+//        }
+//        spinner?.adapter = ArrayAdapter.createFromResource(
+//            activity as ScheduleActivity, todoPriorities, android.R.layout.simple_spinner_item)
+//
+//        spinner?.onItemSelectedListener = object :AdapterView.OnItemSelectedListener {
+//            override fun onNothingSelected(parent: AdapterView<*>?) {
+//                priority = todoCount + 1
+//            }
+//
+//            override fun onItemSelected(
+//                parent: AdapterView<*>?, view: View?, position: Int, id: Long
+//            ) {
+//                val item = parent?.getItemAtPosition(position).toString()
+//                priority = item.toInt()
+//                Log.d("dialog frag", "priorty: $priority")
+//            }
+//        }
+
         // Button - Finalize task
         val okButton = view.findViewById<Button>(R.id.button)
         okButton.setOnClickListener {
-            listener?.todoEntered(localDate, hour, minute, name, comment)
+            listener?.todoEntered(localDate, hour, minute, name, comment, priority)
         }
 
         return view
@@ -119,9 +144,10 @@ class EnterTodoDialogFragment : Fragment() {
 //                }
 //            }
         @JvmStatic
-        fun newInstance(param1: EnterTodoListener) : EnterTodoDialogFragment {
+        fun newInstance(param1: EnterTodoListener, param2: Int) : EnterTodoDialogFragment {
             val enterTodoDialogFrag = EnterTodoDialogFragment()
             enterTodoDialogFrag.listener = param1
+            priority = param2 + 1
             return enterTodoDialogFrag
         }
     }
