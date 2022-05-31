@@ -4,16 +4,17 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
-import java.security.AccessController.getContext
+import android.widget.ImageButton
+import android.widget.ImageView
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val petCareButton: Button = findViewById(R.id.petCareButton)
-        val meditationButton: Button = findViewById(R.id.meditateButton)
-        val scheduleButton: Button = findViewById(R.id.scheduleButton)
+        val petCareButton: ImageView = findViewById(R.id.petCareButton)
+        val meditationButton: ImageView = findViewById(R.id.meditateButton)
+        val scheduleButton: ImageView = findViewById(R.id.scheduleButton)
 
         petCareButton.setOnClickListener {
             Intent(this, PetCareActivity::class.java).also {
