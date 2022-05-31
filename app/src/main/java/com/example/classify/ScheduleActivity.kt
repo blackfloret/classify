@@ -28,6 +28,10 @@ class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null
                     "COMMENT TEXT)")
     }
 
+    fun onDelete() {
+        val db = this.writableDatabase
+        db?.execSQL("DELETE * FROM TODOS");
+    }
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
         TODO("Not yet implemented")
     }
@@ -157,6 +161,7 @@ class ScheduleActivity : AppCompatActivity(), OnTodoClicked, EnterTodoListener {
         Log.d("schedule activity", "db updated")
 
         supportFragmentManager.beginTransaction().remove(dialfrag).commit()
+        adapter = MyTodoListRecyclerViewAdapter(TODO_LIST)
         recycler.setAdapter(adapter)
         fab.visibility = VISIBLE
 
