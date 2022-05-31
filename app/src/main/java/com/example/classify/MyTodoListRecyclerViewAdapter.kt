@@ -39,6 +39,10 @@ class MyTodoListRecyclerViewAdapter(
         holder.dateView.text = item.date.toString()
         if (item.hour > 12) {
             holder.timeView.text = (item.hour - 12).toString() + ":" + item.minute + " PM"
+        } else if (item.hour == 12) {
+            holder.timeView.text = item.hour.toString() + ":" + item.minute + " PM"
+        } else if (item.hour == 0) {
+            holder.timeView.text = 12.toString() + ":" + item.minute + " AM"
         } else {
             holder.timeView.text = item.hour.toString() + ":" + item.minute + " AM"
         }

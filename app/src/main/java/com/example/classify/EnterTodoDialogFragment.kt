@@ -21,8 +21,8 @@ private const val ARG_PARAM2 = "param2"
 
 val today = Calendar.getInstance()
 var localDate: LocalDate = LocalDate.of(today.get(Calendar.YEAR), today.get(Calendar.MONTH)+1, today.get(Calendar.DAY_OF_MONTH))
-var hour: Int = -1
-var minute: Int = -1
+var hour: Int = 23
+var minute: Int = 59
 var name: String = ""
 var comment: String = ""
 var priority: Int = -1

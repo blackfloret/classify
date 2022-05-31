@@ -1,11 +1,13 @@
 package com.example.classify
 
+import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.os.Bundle
 import android.util.Log
 import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +17,14 @@ import java.time.LocalDate
 class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null, 1) {
     // If there's no database already, create one
     override fun onCreate(db: SQLiteDatabase?) {
-        db?.execSQL("CREATE TABLE IF NOT EXISTS TODOS(DATE, HOUR, MINUTE, NAME, COMMENT, PRIORITY)")
+        db?.execSQL(
+            "CREATE TABLE IF NOT EXISTS TODOS(" +
+                    "DATE STRING, " +
+                    "HOUR INTEGER, " +
+                    "MINUTE INTEGER, " +
+                    "NAME TEXT, " +
+                    "COMMENT TEXT, " +
+                    "PRIORITY INTEGER PRIMARY KEY)")
     }
 
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
@@ -26,12 +35,25 @@ class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null
     fun insert(todo: ToDoData) {
         // onCreate() returns a ref to writableDatabase
         // We need to translate this: INSERT INTO CHUCK VALUES("foobar")
-        writableDatabase.execSQL("INSERT INTO TODOS DATE(\"${todo.date}\")")
-        writableDatabase.execSQL("INSERT INTO TODOS HOUR(\"${todo.hour}\")")
-        writableDatabase.execSQL("INSERT INTO TODOS MINUTE(\"${todo.minute}\")")
-        writableDatabase.execSQL("INSERT INTO TODOS NAME(\"${todo.name}\")")
-        writableDatabase.execSQL("INSERT INTO TODOS COMMENT(\"${todo.comment}\")")
-        writableDatabase.execSQL("INSERT INTO TODOS PRIORITY(\"${todo.priority}\")")
+        val db = this.writableDatabase
+
+        val values = ContentValues()
+        values.put("DATE", todo.date.toString())
+        values.put("HOUR", todo.hour)
+        values.put("MINUTE", todo.minute)
+        values.put("NAME", todo.name)
+        values.put("COMMENT", todo.comment)
+        values.put("PRIORITY", todo.priority)
+
+        db.insert("TODO", null, values)
+        db.close()
+
+//        writableDatabase.execSQL("INSERT INTO TODOS DATE(\"${todo.date}\")")
+//        writableDatabase.execSQL("INSERT INTO TODOS HOUR(\"${todo.hour}\")")
+//        writableDatabase.execSQL("INSERT INTO TODOS MINUTE(\"${todo.minute}\")")
+//        writableDatabase.execSQL("INSERT INTO TODOS NAME(\"${todo.name}\")")
+//        writableDatabase.execSQL("INSERT INTO TODOS COMMENT(\"${todo.comment}\")")
+//        writableDatabase.execSQL("INSERT INTO TODOS PRIORITY(\"${todo.priority}\")")
     }
 
     // Read all rows from the database and return a list of strings
@@ -66,21 +88,27 @@ class ScheduleActivity : AppCompatActivity(), OnItemClicked, EnterTodoListener {
     lateinit var recycler: RecyclerView
     lateinit var adapter: MyTodoListRecyclerViewAdapter
     lateinit var dialfrag: EnterTodoDialogFragment
+    lateinit var fab: FloatingActionButton
+    lateinit var database: MyDatabaseManager
+    lateinit var TODO_LIST: MutableList<ToDoData>
 
     // Create a list of todos
     // remember that companion objects create static class variables
-    companion object {
-        var TODO_LIST: MutableList<ToDoData> = mutableListOf(
-            ToDoData(LocalDate.of(2021, 12,22), 7, 30, "Task",  "comment here", 1),
-            ToDoData(LocalDate.of(2022, 6,17), 21, 20, "Exam", "eeeeeeeeeeeeeeeeeeeeeextreeeeeemly loooong text", 2)
-        )
-    }
+//    companion object {
+//        var TODO_LIST: MutableList<ToDoData> = mutableListOf(
+//            ToDoData(LocalDate.of(2021, 12,22), 7, 30, "Task",  "comment here", 1),
+//            ToDoData(LocalDate.of(2022, 6,17), 21, 20, "Exam", "eeeeeeeeeeeeeeeeeeeeeextreeeeeemly loooong text", 2)
+//        )
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_schedule)
 
-        //TOOD_LIST = readAllRows()
+        database = MyDatabaseManager(this)
+
+        val allrows = database.readAllRows()
+        TODO_LIST = allrows.toMutableList()
         adapter = MyTodoListRecyclerViewAdapter(TODO_LIST)
         adapter.onClick = this
 
@@ -89,13 +117,14 @@ class ScheduleActivity : AppCompatActivity(), OnItemClicked, EnterTodoListener {
         recycler.layoutManager = LinearLayoutManager(this)
         Log.d("schedule activity", "inflated the recycler")
 
-        val fab: FloatingActionButton = findViewById(R.id.fab)
+        fab = findViewById(R.id.fab)
         fab.setOnClickListener {
             Log.d("schedule activity", "fab clicked!")
             dialfrag = EnterTodoDialogFragment.newInstance(this, TODO_LIST.size)
             supportFragmentManager.beginTransaction().apply {
                 replace(R.id.TodoDialogFrag, dialfrag, "enter todo dialog frag")
                 commit()
+
                 recycler.setAdapter(null)
                 fab.visibility = INVISIBLE
                 Log.d("schedule activity", "enter todo inflated")
@@ -117,8 +146,13 @@ class ScheduleActivity : AppCompatActivity(), OnItemClicked, EnterTodoListener {
     ) {
         var newData = ToDoData(localDate, hour, minute, name, comment, priority)
         TODO_LIST.add(newData)
-        supportFragmentManager.beginTransaction().remove(dialfrag).commit()
         Log.d("schedule activity", "TOOD_LIST updated")
+        database.insert(newData)
+        Log.d("schedule activity", "db updated")
+
+        supportFragmentManager.beginTransaction().remove(dialfrag).commit()
+        recycler.setAdapter(adapter)
+        fab.visibility = VISIBLE
 
         runOnUiThread {
             // Then tell adapter that data has changed
