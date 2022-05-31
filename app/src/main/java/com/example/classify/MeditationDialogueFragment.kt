@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import java.net.URL
 
 interface MeditationListener {
@@ -39,15 +40,15 @@ class MeditationDialogueFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_meditation_dialogue, container, false)
-        val oneMinuteButton: Button = view.findViewById(R.id.one_minute)
+        val oneMinuteButton: ImageView = view.findViewById(R.id.one_minute)
         oneMinuteButton.setOnClickListener {
             listener?.startMeditation(1)
         }
-        val threeMinuteButton: Button = view.findViewById(R.id.three_minutes)
+        val threeMinuteButton: ImageView = view.findViewById(R.id.three_minutes)
         threeMinuteButton.setOnClickListener {
             listener?.startMeditation(3)
         }
-        val fiveMinuteButton: Button = view.findViewById(R.id.five_minutes)
+        val fiveMinuteButton: ImageView = view.findViewById(R.id.five_minutes)
         fiveMinuteButton.setOnClickListener {
             listener?.startMeditation(5)
         }
