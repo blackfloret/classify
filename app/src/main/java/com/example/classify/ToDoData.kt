@@ -9,4 +9,9 @@ class ToDoData
      val priority: Int
     ) {
 
+        override fun toString(): String {
+            val str = "$date, $hour:$minute, $name, $comment, $priority"
+            return str
+        }
+
 }

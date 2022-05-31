@@ -9,8 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.classify.ScheduleActivity.Companion.TODO_LIST
-import com.example.classify.placeholder.PlaceholderContent
-import java.time.LocalDate
 
 /**
  * A fragment representing a list of Items.

@@ -9,8 +9,8 @@ import com.example.classify.databinding.TodoItemBinding
 import com.example.classify.placeholder.PlaceholderContent.PlaceholderItem
 
 // Define a listener interface for this fragment
-interface OnItemClicked {
-    fun onItemClick(position: Int)
+interface OnTodoClicked {
+    fun onTodoClick(position: Int)
 }
 
 /**
@@ -21,7 +21,7 @@ class MyTodoListRecyclerViewAdapter(
     private val values: List<ToDoData>,
 ) : RecyclerView.Adapter<MyTodoListRecyclerViewAdapter.ViewHolder>() {
 
-    var onClick: OnItemClicked? = null
+    var onClick: OnTodoClicked? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -35,17 +35,29 @@ class MyTodoListRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
+
         holder.nameView.text = item.priority.toString() + ". " + item.name
         holder.dateView.text = item.date.toString()
-        if (item.hour > 12) {
-            holder.timeView.text = (item.hour - 12).toString() + ":" + item.minute + " PM"
-        } else if (item.hour == 12) {
-            holder.timeView.text = item.hour.toString() + ":" + item.minute + " PM"
-        } else if (item.hour == 0) {
-            holder.timeView.text = 12.toString() + ":" + item.minute + " AM"
+
+        var minStr = ""
+        if (item.minute < 10) {
+            minStr = "0" + item.minute.toString()
         } else {
-            holder.timeView.text = item.hour.toString() + ":" + item.minute + " AM"
+            minStr = item.minute.toString()
         }
+
+        var timeStr = ""
+        if (item.hour == 12 ) {
+            timeStr = timeStr + 12.toString() + ":" + minStr + " PM"
+        } else if (item.hour == 0) {
+            timeStr = timeStr + 12.toString() + ":" + minStr + " AM"
+        } else if (item.hour > 12) {
+            timeStr = timeStr + (item.hour - 12).toString() + ":" + minStr + " PM"
+        } else {
+            timeStr = timeStr + item.hour.toString() + ":" + minStr + " AM"
+        }
+        holder.timeView.text = timeStr
+
         holder.commentView.text = item.comment
     }
 
