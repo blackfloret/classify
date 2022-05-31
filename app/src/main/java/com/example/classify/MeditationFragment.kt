@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import java.util.*
 import kotlin.concurrent.timer
 
 // TODO: Rename parameter arguments, choose names that match
@@ -35,17 +36,14 @@ class MeditationFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_meditation, container, false)
         val endButton: Button = view.findViewById(R.id.stop_meditation_button)
-        endButton.setOnClickListener {
-            listener?.endMeditation(0)
-        }
         val timerText : TextView = view.findViewById(R.id.meditation_timer)
         val instructionText: TextView = view.findViewById(R.id.meditation_instruction)
         val goal = minutesDuration.times(60)
         var elapsed = 0
         var state = 0
         timerText.text = convertToMinutesSeconds(elapsed)
-
-        timer(period = 1000) {
+        var meditationTimer: Timer? = null
+        meditationTimer = timer(period = 1000) {
             elapsed++
             if(elapsed % 4 == 0) {
                 state++
@@ -63,8 +61,15 @@ class MeditationFragment : Fragment() {
             getActivity()?.runOnUiThread {
                 timerText.text = convertToMinutesSeconds(goal-elapsed)
             }
+            if (goal - elapsed <= 0) {
+                meditationTimer?.cancel()
+                listener?.endMeditation(elapsed)
+            }
         }
 
+        endButton.setOnClickListener {
+            listener?.endMeditation(elapsed)
+        }
 
         return view
     }
