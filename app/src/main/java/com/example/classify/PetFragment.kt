@@ -7,6 +7,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,37 +26,8 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 
-/*class petView(context: Context): View(context) {
-    val bitmap1: Bitmap
-    val bitmap2: Bitmap
-    var xpos: Float
-    var ypos: Float
-    var count: Int
-    var paint: Paint
-
-
-    init {
-        bitmap1 = BitmapFactory.decodeResource(resources, R.drawable.sprite_up)
-        bitmap2 = BitmapFactory.decodeResource(resources, R.drawable.sprite_down)
-
-        xpos = 0F
-        ypos = 0F
-        count = 0
-        paint = Paint()
-    }
-
-    override fun onDraw(canvas: Canvas?) {
-        super.onDraw(canvas)
-
-        if (count++ % 2 == 0) {
-            canvas?.drawBitmap(bitmap1, xpos, ypos, paint)
-        } else {
-            canvas?.drawBitmap(bitmap2, xpos, ypos, paint)
-        }
-    }
-} */
-
 private lateinit var petAnimation: AnimationDrawable
+private lateinit var eatAnimation: AnimationDrawable
 
 class PetFragment : Fragment() {
     // TODO: Rename and change types of parameters
@@ -75,13 +47,13 @@ class PetFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_pet, container, false)
-        var counter = 0
+        view.clearAnimation()
 
         val petPic = view.findViewById<ImageView>(R.id.petPic).apply{
             setBackgroundResource(R.drawable.dance_animation)
             petAnimation = background as AnimationDrawable
+            petAnimation.start()
         }
-        petAnimation.start()
 
         return view
     }
@@ -95,12 +67,18 @@ class PetFragment : Fragment() {
          * @param param2 Parameter 2.
          * @return A new instance of fragment PetFragment.
          */
+        fun feedPet(){
+            Log.d("PETTESTS", "COMMUNICATION!")
+
+
+
+        }
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             PetFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM1, "feed")
                     putString(ARG_PARAM2, param2)
                 }
             }
