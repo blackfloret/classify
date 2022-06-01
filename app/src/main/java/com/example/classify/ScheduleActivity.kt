@@ -67,13 +67,13 @@ class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null
 
         // iterate over table of Query results and add the todo to result variable
         while (cursor.moveToNext()) {
-            val dateStr = cursor.getString(0)
+            val priority = cursor.getInt(0)
+            val dateStr = cursor.getString(1)
             val date = LocalDate.parse(dateStr)
-            val hour = cursor.getInt(1)
-            val min = cursor.getInt(2)
-            val name = cursor.getString(3)
-            val comment = cursor.getString(4)
-            val priority = cursor.getInt(5)
+            val hour = cursor.getInt(2)
+            val min = cursor.getInt(3)
+            val name = cursor.getString(4)
+            val comment = cursor.getString(5)
 
             val str = "$dateStr, $hour:$min, $name, $comment, $priority"
             Log.d("schedule activity", "todo read: $str")
