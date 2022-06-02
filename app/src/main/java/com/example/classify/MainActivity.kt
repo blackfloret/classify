@@ -1,6 +1,8 @@
 package com.example.classify
 
 import android.Manifest.permission.ACTIVITY_RECOGNITION
+import android.app.job.JobParameters
+import android.app.job.JobService
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -18,6 +20,10 @@ import android.widget.TextView
 import android.widget.Toast
 import android.hardware.SensorManager
 import android.os.Build
+import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 
@@ -76,7 +82,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     fun updateBalance(newBalance: Int) {
         balance = newBalance
-        val newBalText = "$\$balance"
+        val newBalText = "\$$balance"
         balanceText.text = newBalText
         with(sf.edit()) {
             putInt("balance", balance)
@@ -95,7 +101,9 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     override fun onSensorChanged(event: SensorEvent?) {
         if(running) {
             totalSteps = event!!.values[0]
+            Log.d("dirk", "$totalSteps")
             val currentSteps = totalSteps.toInt() - prevTotalSteps.toInt()
+            //updateBalance()
             stepsText.text = ("$currentSteps steps")
         }
     }
@@ -113,8 +121,77 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         if(stepSensor == null) {
             Toast.makeText(this, "Pedometer unable to be accessed", Toast.LENGTH_SHORT).show()
         } else {
-            sensorManager?.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_UI)
+            sensorManager?.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL)
         }
     }
 
+    override fun onPause() {
+        running = false
+        sensorManager?.unregisterListener(this)
+        super.onPause()
+    }
+
+    fun resetSteps() {
+        val cashedSteps = (totalSteps.toInt() - prevTotalSteps.toInt()) / 100
+        val remSteps = (totalSteps.toInt() - prevTotalSteps.toInt()) % 100
+        updateBalance(balance + cashedSteps)
+        prevTotalSteps = totalSteps - remSteps
+        stepsText.text = "$remSteps steps"
+
+        with(sf.edit()) {
+            putFloat("prevSteps", prevTotalSteps)
+            apply()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.about_item -> {
+                displayAbout()
+                true
+            }
+            R.id.reset_item -> {
+                resetSteps()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    fun displayAbout() {
+
+    }
+
+}
+
+class StepJobService: JobService(), SensorEventListener {
+    override fun onStartJob(jobParamters: JobParameters?): Boolean {
+        val sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        val stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
+        stepCounterSensor?.let {
+            sensorManager.registerListener(this@StepJobService, it, SensorManager.SENSOR_DELAY_FASTEST)
+        }
+        return true
+    }
+
+    override fun onStopJob(p0: JobParameters?): Boolean {
+        return true
+    }
+
+    override fun onSensorChanged(sensorEvent: SensorEvent?) {
+        sensorEvent ?: return
+        sensorEvent.values.firstOrNull()?.let {
+
+        }
+    }
+
+    override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
+        Log.d("dirk", "accurancyChanged")
+    }
 }
