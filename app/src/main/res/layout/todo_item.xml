@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+<!--    <ImageView-->
+<!--        android:id="@+id/background"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:adjustViewBounds="true"-->
+<!--        android:scalexy = "true"-->
+<!--        android:src="@drawable/wood_crop"/>-->
+
+    <!--    <CheckBox-->
+<!--        android:id="@+id/check_box"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:buttonTint="@color/white"-->
+<!--        android:layout_alignParentLeft="true" />-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:background="@drawable/wood_rectangle_full_border"
+        android:scaleType="fitXY" />
+
+    <ImageView
+        android:id="@+id/x_button"
+        android:layout_width="28dp"
+        android:layout_height="27dp"
+        android:layout_gravity="right|center_vertical"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/x_symbol"
+        android:backgroundTint="@color/white" />
+
+    <TextView
+        android:id="@+id/todo_name"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="16dp"
+        android:layout_toEndOf="@id/x_button"
+        android:layout_toRightOf="@id/x_button"
+        android:layout_alignParentRight="true"
+        android:text="23. First Exam"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/press_start_2p"
+        android:shadowColor="@color/black"
+        android:shadowDx="5"
+        android:shadowDy="5"
+        android:shadowRadius="0.1"
+        />
+
+    <ImageView
+        android:id="@+id/cal_pic"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="-2dp"
+        android:layout_below="@id/todo_name"
+        android:layout_toEndOf="@id/x_button"
+        android:layout_toRightOf="@id/x_button"
+        android:src="@drawable/pixel_calendar_simple"
+        android:tint="@color/white"
+        />
+
+    <TextView
+        android:id="@+id/todo_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/cal_pic"
+        android:layout_below="@+id/todo_name"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="10dp"
+        android:gravity="center"
+        android:text="May 23, 2015"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:fontFamily="@font/press_start_2p"
+        android:shadowColor="@color/black"
+        android:shadowDx="5"
+        android:shadowDy="5"
+        android:shadowRadius="0.1"
+        />
+
+    <ImageView
+        android:id="@+id/clock_pic"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="-2dp"
+        android:layout_below="@id/todo_date"
+        android:layout_toEndOf="@id/x_button"
+        android:layout_toRightOf="@id/x_button"
+        android:src="@drawable/pixel_clock"
+        android:tint="@color/white"/>
+
+    <TextView
+        android:id="@+id/todo_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/clock_pic"
+        android:layout_below="@+id/todo_date"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="10dp"
+        android:gravity="center"
+        android:text="11:59 pm"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:fontFamily="@font/press_start_2p"
+        android:shadowColor="@color/black"
+        android:shadowDx="5"
+        android:shadowDy="5"
+        android:shadowRadius="0.1"
+        />
+
+    <ImageView
+        android:id="@+id/comment_pic"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="-2dp"
+        android:layout_below="@+id/todo_time"
+        android:layout_toEndOf="@id/x_button"
+        android:layout_toRightOf="@id/x_button"
+        android:src="@drawable/pixel_comment"
+        android:tint="@color/white"/>
+
+    <TextView
+        android:id="@+id/todo_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/todo_time"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="16dp"
+        android:layout_toEndOf="@+id/comment_pic"
+        android:fontFamily="@font/press_start_2p"
+        android:text="Comment about assignment goes here"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:shadowColor="@color/black"
+        android:shadowDx="5"
+        android:shadowDy="5"
+        android:shadowRadius="0.1"
+        />
+
+<!--    <TextView-->
+<!--        android:id="@+id/border"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="1dp"-->
+<!--        android:layout_marginTop="5dp"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:layout_marginEnd="16dp"-->
+<!--        android:layout_below="@+id/todo_comment"-->
+<!--        android:background="#808080" />-->
+</RelativeLayout>
