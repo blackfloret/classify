@@ -12,8 +12,9 @@ import com.example.classify.placeholder.PlaceholderContent.PlaceholderItem
 import java.time.format.DateTimeFormatter
 
 // Define a listener interface for this fragment
-interface OnTodoClicked {
+interface adapterListener {
     fun onTodoClick(position: Int)
+    fun onTodoRemove(priority: Int)
 }
 
 /**
@@ -21,10 +22,10 @@ interface OnTodoClicked {
  * TODO: Replace the implementation with code for your data type.
  */
 class MyTodoListRecyclerViewAdapter(
-    private val values: List<ToDoData>,
+    private val values: ArrayList<ToDoData>,
 ) : RecyclerView.Adapter<MyTodoListRecyclerViewAdapter.ViewHolder>() {
 
-    var onClick: OnTodoClicked? = null
+    var listener: adapterListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -40,7 +41,8 @@ class MyTodoListRecyclerViewAdapter(
         val item = values[position]
 
         holder.xButton.setOnClickListener {
-            //removeAt(position)
+            removeItem(position)
+            listener?.onTodoRemove(item.priority)
         }
 
         holder.nameView.text = item.priority.toString() + ". " + item.name
@@ -71,11 +73,11 @@ class MyTodoListRecyclerViewAdapter(
         holder.commentView.text = item.comment
     }
 
-//    fun removeAt(position: Int) {
-//        values.removeAt(position)
-//        notifyItemRemoved(position)
-//        notifyItemRangeChanged(position, itemCount)
-//    }
+    fun removeItem(position: Int) {
+        values.removeAt(position)
+        notifyItemRemoved(position)
+        notifyItemRangeChanged(position, itemCount)
+    }
 
     override fun getItemCount(): Int = values.size
 

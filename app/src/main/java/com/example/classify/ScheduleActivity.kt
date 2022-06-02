@@ -27,12 +27,14 @@ class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null
                     "COMMENT TEXT)")
     }
 
-    fun onDelete() {
-//        val db = this.writableDatabase
-//        db?.execSQL("DELETE  FROM TODOS");
-    }
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
         TODO("Not yet implemented")
+    }
+
+    // Delete TodoData info from the database
+    fun onDelete(priority: Int) {
+        val db = this.writableDatabase
+        db.delete("TODOS", "PRIORITY" + "=" + priority, null)
     }
 
     // Insert TodoData info into the database
@@ -58,7 +60,7 @@ class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null
 
     // Read all rows from the database and return a list of strings
     fun readAllRows(): List<ToDoData> {
-        val result = mutableListOf<ToDoData>()
+        val result = arrayListOf<ToDoData>()
 
         // read from database
         // cursor points to table of Query results
@@ -95,7 +97,7 @@ class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null
 }
 
 
-class ScheduleActivity : AppCompatActivity(), OnTodoClicked, EnterTodoListener {
+class ScheduleActivity : AppCompatActivity(), adapterListener, EnterTodoListener {
     lateinit var recycler: RecyclerView
     lateinit var adapter: MyTodoListRecyclerViewAdapter
     lateinit var dialfrag: EnterTodoDialogFragment
@@ -105,7 +107,7 @@ class ScheduleActivity : AppCompatActivity(), OnTodoClicked, EnterTodoListener {
     // Create a list of todos
     // remember that companion objects create static class variables
     companion object {
-        var TODO_LIST: MutableList<ToDoData> = mutableListOf()
+        var TODO_LIST = arrayListOf<ToDoData>()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -114,10 +116,10 @@ class ScheduleActivity : AppCompatActivity(), OnTodoClicked, EnterTodoListener {
 
         database = MyDatabaseManager(this)
         val allRows = database.readAllRows()
-        TODO_LIST = allRows.toMutableList()
+        TODO_LIST = ArrayList(allRows)
 
         adapter = MyTodoListRecyclerViewAdapter(TODO_LIST)
-        adapter.onClick = this
+        adapter.listener = this
 
         recycler = findViewById(R.id.TodoRecyler)
         recycler.adapter = adapter
@@ -144,6 +146,17 @@ class ScheduleActivity : AppCompatActivity(), OnTodoClicked, EnterTodoListener {
         // The onClick implementation of the RecyclerView item click
     }
 
+    override fun onTodoRemove(priority: Int) {
+        Log.d("schedule activity", "todo to be removed at position $priority")
+        database.onDelete(priority)
+        val allRows = database.readAllRows()
+        TODO_LIST = ArrayList(allRows)
+        Log.d("schedule activity", "db updated, todo was removed")
+
+        adapter = MyTodoListRecyclerViewAdapter(TODO_LIST)
+        recycler.setAdapter(adapter)
+    }
+
     override fun todoEntered(
         localDate: LocalDate,
         hour: Int,
@@ -156,8 +169,8 @@ class ScheduleActivity : AppCompatActivity(), OnTodoClicked, EnterTodoListener {
 
         database.insert(newData)
         val allRows = database.readAllRows()
-        TODO_LIST = allRows.toMutableList()
-        Log.d("schedule activity", "db updated")
+        TODO_LIST = ArrayList(allRows)
+        Log.d("schedule activity", "db updated, todo was inserted")
 
         supportFragmentManager.beginTransaction().remove(dialfrag).commit()
         adapter = MyTodoListRecyclerViewAdapter(TODO_LIST)

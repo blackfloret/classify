@@ -11,25 +11,26 @@
 <!--        android:adjustViewBounds="true"-->
 <!--        android:scalexy = "true"-->
 <!--        android:src="@drawable/wood_crop"/>-->
+
+    <!--    <CheckBox-->
+<!--        android:id="@+id/check_box"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:buttonTint="@color/white"-->
+<!--        android:layout_alignParentLeft="true" />-->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="130dp"
         android:background="@drawable/wood_rectangle_full_border"
         android:scaleType="fitXY" />
 
-<!--    <CheckBox-->
-<!--        android:id="@+id/check_box"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:buttonTint="@color/white"-->
-<!--        android:layout_alignParentLeft="true" />-->
     <ImageView
         android:id="@+id/x_button"
-        android:layout_width="17dp"
-        android:layout_height="15dp"
+        android:layout_width="28dp"
+        android:layout_height="27dp"
         android:layout_gravity="right|center_vertical"
-        android:layout_marginTop="17dp"
         android:layout_marginStart="23dp"
+        android:layout_marginTop="17dp"
         android:layout_marginEnd="12dp"
         android:background="@drawable/x_symbol"
         android:backgroundTint="@color/white" />
