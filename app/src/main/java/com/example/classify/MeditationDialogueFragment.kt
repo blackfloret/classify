@@ -6,13 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import java.time.Duration
+import java.net.URL
 
 interface MeditationListener {
     fun endMeditation(duration: Int)
     fun startMeditation(duration: Int)
 }
 
+val quoteUrl = URL("https://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=jsonp&jsonp=?")
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
