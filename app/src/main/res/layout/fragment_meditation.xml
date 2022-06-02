@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:background="@color/sunset_orange"
     tools:context=".MeditationFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -15,14 +16,16 @@
             android:id="@+id/meditation_instruction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="8dp"
             android:fontFamily="@font/press_start_2p"
             android:text="@string/inhale"
-            app:layout_constraintBottom_toTopOf="@+id/stop_meditation_button"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/meditation_timer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/meditation_timer" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <Button
             android:id="@+id/stop_meditation_button"
@@ -30,26 +33,26 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/press_start_2p"
             android:text="@string/end"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/meditation_instruction" />
+            app:layout_constraintTop_toBottomOf="@+id/meditation_timer" />
 
         <TextView
             android:id="@+id/meditation_timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="16dp"
             android:fontFamily="@font/press_start_2p"
             android:text="@string/empty_timer"
+            android:textColor="@color/white"
             android:textSize="34sp"
-            app:layout_constraintBottom_toTopOf="@+id/meditation_instruction"
+            app:layout_constraintBottom_toTopOf="@+id/stop_meditation_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:layout_constraintTop_toBottomOf="@+id/meditation_instruction" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

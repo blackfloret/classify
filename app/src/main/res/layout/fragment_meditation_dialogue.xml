@@ -11,6 +11,35 @@
         android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/quote_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/press_start_2p"
+            android:text="Into each life rain must fall but rain can be the giver of life and it is all in your attitude that makes rain produce sunshine."
+            android:textAlignment="viewStart"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/author_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/author_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/press_start_2p"
+            android:text="Byron Pulsifer"
+            android:textColor="@color/white"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toTopOf="@+id/meditationQuestion"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/quote_text" />
+
+        <TextView
             android:id="@+id/meditationQuestion"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -20,47 +49,59 @@
             android:fontFamily="@font/press_start_2p"
             android:text="@string/how_many_minutes_would_you_like_to_meditate"
             android:textAlignment="center"
+            android:textColor="@color/white"
             android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/three_minutes"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/author_text" />
 
-        <Button
+        <ImageView
             android:id="@+id/three_minutes"
             style="@android:style/Widget.Material.Light.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="32dp"
             android:layout_marginTop="24dp"
+            android:layout_marginEnd="32dp"
+            android:background="#00FFFFFF"
             android:fontFamily="@font/press_start_2p"
             android:text="@string/_3"
             app:layout_constraintEnd_toStartOf="@+id/five_minutes"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/one_minute"
-            app:layout_constraintTop_toBottomOf="@+id/meditationQuestion" />
+            app:layout_constraintTop_toBottomOf="@+id/meditationQuestion"
+            app:srcCompat="@drawable/three_minutes" />
 
-        <Button
+        <ImageView
             android:id="@+id/five_minutes"
-            style="@android:style/Widget.Material.Light.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_marginEnd="16dp"
+            android:background="#00FFFFFF"
             android:fontFamily="@font/press_start_2p"
             android:text="@string/_5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/three_minutes"
-            app:layout_constraintTop_toTopOf="@+id/three_minutes" />
+            app:layout_constraintTop_toTopOf="@+id/three_minutes"
+            app:srcCompat="@drawable/five_minutes" />
 
-        <Button
+        <ImageView
             android:id="@+id/one_minute"
             style="@android:style/Widget.Material.Light.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="16dp"
+            android:background="#00FFFFFF"
             android:fontFamily="@font/press_start_2p"
             android:text="@string/_1"
             app:layout_constraintEnd_toStartOf="@+id/three_minutes"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/three_minutes" />
+            app:layout_constraintTop_toTopOf="@+id/three_minutes"
+            app:srcCompat="@drawable/one_minute" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
