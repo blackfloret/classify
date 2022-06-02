@@ -93,28 +93,16 @@ class EnterTodoDialogFragment : Fragment() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
         })
 
-        // Spinner - Set priority
-//        val spinner = view.findViewById<Spinner>(R.id.spinner)
-//        var todoPriorities = ArrayList<String>()
-//        for (i in 1..todoCount) {
-//            todoPriorities.add("$i")
-//        }
-//        spinner?.adapter = ArrayAdapter.createFromResource(
-//            activity as ScheduleActivity, todoPriorities, android.R.layout.simple_spinner_item)
-//
-//        spinner?.onItemSelectedListener = object :AdapterView.OnItemSelectedListener {
-//            override fun onNothingSelected(parent: AdapterView<*>?) {
-//                priority = todoCount + 1
-//            }
-//
-//            override fun onItemSelected(
-//                parent: AdapterView<*>?, view: View?, position: Int, id: Long
-//            ) {
-//                val item = parent?.getItemAtPosition(position).toString()
-//                priority = item.toInt()
-//                Log.d("dialog frag", "priorty: $priority")
-//            }
-//        }
+        // NumberPicker - Set priority
+        val numPicker = view.findViewById<NumberPicker>(R.id.number_picker)
+        numPicker.setMinValue(1)
+        numPicker.setMaxValue(priority)
+        numPicker.setValue(1)
+        numPicker.setOnValueChangedListener { numberPicker, i, i2 ->
+            priority = i2
+            Log.d("dialog frag", "priority (which is set to i2): $i, $i2")
+        }
+
 
         // Button - Finalize task
         val okButton = view.findViewById<Button>(R.id.button)

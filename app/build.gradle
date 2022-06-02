@@ -32,6 +32,9 @@ android {
     buildFeatures {
         viewBinding true
     }
+    dataBinding {
+        enabled = true
+    }
 }
 
 apply plugin: 'com.android.application'
