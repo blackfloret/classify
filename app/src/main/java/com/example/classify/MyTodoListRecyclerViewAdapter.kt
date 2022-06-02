@@ -2,8 +2,6 @@ package com.example.classify
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +10,7 @@ import com.example.classify.placeholder.PlaceholderContent.PlaceholderItem
 import java.time.format.DateTimeFormatter
 
 // Define a listener interface for this fragment
-interface adapterListener {
+interface AdapterListener {
     fun onTodoClick(position: Int)
     fun onTodoRemove(priority: Int)
 }
@@ -25,7 +23,7 @@ class MyTodoListRecyclerViewAdapter(
     private val values: ArrayList<ToDoData>,
 ) : RecyclerView.Adapter<MyTodoListRecyclerViewAdapter.ViewHolder>() {
 
-    var listener: adapterListener? = null
+    var listener: AdapterListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -40,6 +38,7 @@ class MyTodoListRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
 
+        // Remove the todoItem from RecyclerView AND database
         holder.xButton.setOnClickListener {
             removeItem(position)
             listener?.onTodoRemove(item.priority)
