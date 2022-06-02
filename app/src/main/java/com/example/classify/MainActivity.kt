@@ -1,21 +1,38 @@
 package com.example.classify
 
+import android.Manifest.permission.ACTIVITY_RECOGNITION
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import android.hardware.SensorManager
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 
 lateinit var MAINACTIVITY: MainActivity
 var balance = 0
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), SensorEventListener {
     lateinit var balanceText: TextView
     lateinit var stepsText: TextView
     lateinit var sf: SharedPreferences
+    private var sensorManager: SensorManager? = null
+    private var running = false
+    private var totalSteps = 0f
+    private var prevTotalSteps = 0f
+
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -28,7 +45,15 @@ class MainActivity : AppCompatActivity() {
         val meditationButton: ImageView = findViewById(R.id.meditateButton)
         val scheduleButton: ImageView = findViewById(R.id.scheduleButton)
 
-        balance = sf.getInt("balance", 0)
+        updateBalance(sf.getInt("balance", 0))
+        prevTotalSteps = sf.getFloat("prevSteps", 0f)
+
+        if(ActivityCompat.checkSelfPermission(this, ACTIVITY_RECOGNITION) != PERMISSION_GRANTED) {
+            requestPermissions(arrayOf(ACTIVITY_RECOGNITION), 1)
+        }
+
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+
 
         petCareButton.setOnClickListener {
             Intent(this, PetCareActivity::class.java).also {
@@ -67,5 +92,29 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onSensorChanged(event: SensorEvent?) {
+        if(running) {
+            totalSteps = event!!.values[0]
+            val currentSteps = totalSteps.toInt() - prevTotalSteps.toInt()
+            stepsText.text = ("$currentSteps steps")
+        }
+    }
+
+    override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
+        // unnneeded
+    }
+
+    override fun onResume() {
+        super.onResume()
+        running = true
+
+        val stepSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
+
+        if(stepSensor == null) {
+            Toast.makeText(this, "Pedometer unable to be accessed", Toast.LENGTH_SHORT).show()
+        } else {
+            sensorManager?.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_UI)
+        }
+    }
 
 }
