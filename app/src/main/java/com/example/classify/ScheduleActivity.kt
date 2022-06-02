@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.time.LocalDate
-import kotlin.concurrent.thread
 
 class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null, 1) {
     // If there's no database already, create one
@@ -29,8 +28,8 @@ class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null
     }
 
     fun onDelete() {
-        val db = this.writableDatabase
-        db?.execSQL("DELETE * FROM TODOS");
+//        val db = this.writableDatabase
+//        db?.execSQL("DELETE  FROM TODOS");
     }
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
         TODO("Not yet implemented")
