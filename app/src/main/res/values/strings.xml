@@ -2,6 +2,9 @@
     <string name="app_name">Classify</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="meditate">Meditate</string>
+    <string name="schedule">Schedule</string>
+    <string name="pet_care">Pet Care</string>
     <string name="inhale">Inhale…</string>
     <string name="exhale">Exhale…</string>
     <string name="hold">Hold…</string>
