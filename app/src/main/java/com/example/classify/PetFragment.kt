@@ -1,19 +1,12 @@
 package com.example.classify
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.Paint
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
-import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,10 +22,12 @@ private const val ARG_PARAM2 = "param2"
 private lateinit var petAnimation: AnimationDrawable
 private lateinit var eatAnimation: AnimationDrawable
 
+
 class PetFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    lateinit var petPic: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,13 +44,20 @@ class PetFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_pet, container, false)
         view.clearAnimation()
 
-        val petPic = view.findViewById<ImageView>(R.id.petPic).apply{
+        petPic = view.findViewById<ImageView>(R.id.petPic)
+
+        dancing()
+
+
+        return view
+    }
+
+    private fun dancing (){
+        petPic.apply{
             setBackgroundResource(R.drawable.dance_animation)
             petAnimation = background as AnimationDrawable
             petAnimation.start()
         }
-
-        return view
     }
 
     companion object {
@@ -67,12 +69,7 @@ class PetFragment : Fragment() {
          * @param param2 Parameter 2.
          * @return A new instance of fragment PetFragment.
          */
-        fun feedPet(){
-            Log.d("PETTESTS", "COMMUNICATION!")
 
-
-
-        }
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
