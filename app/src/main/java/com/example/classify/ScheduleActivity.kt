@@ -39,11 +39,11 @@ class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { }
 
-    fun onPriorityUpdate(priority: Int) {
+    fun onDatabaseUpdate(priority: Int) {
         val db = this.writableDatabase
         db.execSQL("UPDATE TODOS SET PRIORITY = PRIORITY + 1 WHERE PRIORITY >= ${priority} ")
         db.close()
-        Log.d("schedule activity", "todo deleted with priority: $priority")
+        Log.d("database", "todo prioties updated")
     }
 
     // Delete TodoData info from the database
@@ -69,7 +69,7 @@ class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null
         values.put("COMMENT", todo.comment)
 
         val success = db.insert("TODOS", null, values)
-        Log.d("schedule activity", "todo inserted: ${todo.toString()}")
+        Log.d("database", "todo inserted: ${todo.toString()}")
 
         db.close()
     }
@@ -86,8 +86,7 @@ class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null
         db.close()
     }
 
-
-    // Read all rows from the database and return a list of strings
+    // Read all rows from the database and return a list of TodoData items
     fun readAllRows(): List<ToDoData> {
         val result = arrayListOf<ToDoData>()
 
@@ -96,7 +95,7 @@ class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null
         val db = this.writableDatabase
         val cursor = db.rawQuery("SELECT * FROM TODOS", null)
 
-        // iterate over table of Query results and add the todo to result variable
+        // iterate over table of Query results and add the new TodoData to result list
         while (cursor.moveToNext()) {
             val priority = cursor.getInt(0)
             val dateStr = cursor.getString(1)
@@ -107,10 +106,10 @@ class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null
             val comment = cursor.getString(5)
 
             val str = "$dateStr, $hour:$min, $name, $comment, $priority"
-            Log.d("schedule activity", "todo read: $str")
+            Log.d("database", "todo read: $str")
 
             val todoItem = ToDoData(date, hour, min, name, comment, priority)
-            Log.d("schedule activity", "todo read and converted to: ${todoItem.toString()}")
+            Log.d("database", "todo read and converted to: ${todoItem.toString()}")
             result.add(todoItem)
         }
         cursor.close()
@@ -118,9 +117,9 @@ class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null
         val c = db.rawQuery("SELECT COUNT(*) AS TODO_COUNT FROM TODOS", null)
         while (c.moveToNext()) {
             val count = c.getInt(0)
-            Log.d("schedule activity", "TODOS table length: $count")
+            Log.d("database", "TODOS table length: $count")
         }
-        Log.d("schedule activity", "todo_list length: ${result.size}")
+        Log.d("database", "TODO_LIST length: ${result.size}")
         c.close()
         db.close()
         return result
@@ -131,11 +130,12 @@ class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null
 class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, BalanceListener {
     lateinit var balanceText: TextView
     lateinit var stepsText: TextView
-    lateinit var recycler: RecyclerView
+    lateinit var database: MyDatabaseManager
     lateinit var adapter: MyTodoListRecyclerViewAdapter
+    lateinit var recycler: RecyclerView
     lateinit var dialfrag: EnterTodoDialogFragment
     lateinit var fab: FloatingActionButton
-    lateinit var database: MyDatabaseManager
+
 
     // Create a list of todos
     // remember that companion objects create static class variables
@@ -150,7 +150,7 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, B
         SCHEDULEACTIVITY = this
 
         balanceText = findViewById(R.id.balance_text)
-        balanceText.text = "$${balance}"
+//        balanceText.text = "$${balance}"
         stepsText = findViewById(R.id.steps_text)
 
         database = MyDatabaseManager(this)
@@ -181,7 +181,7 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, B
                 stepsText.visibility = INVISIBLE
                 recycler.setAdapter(null)
                 fab.visibility = INVISIBLE
-                Log.d("schedule activity", "inflated enter todo")
+                Log.d("schedule activity", "inflated enter todo dialog")
             }
         }
     }
@@ -200,11 +200,10 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, B
     override fun onTodoRemove(priority: Int) {
         for (todo in TODO_LIST) {
             if (todo.priority == priority){
-                database.onDelete(priority)
                 TODO_LIST.remove(todo)
             }
         }
-        updatePriorities(priority)
+        updatePrioritiesOnDelete(priority)
         insertionSort()
 
         Log.d("todo removed", "db updated, todo was removed")
@@ -228,7 +227,7 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, B
         priority: Int
     ) {
         val newData = ToDoData(localDate, hour, minute, name, comment, priority)
-        updatePriorities(newData.priority)
+        updatePrioritiesOnInsert(newData.priority)
         TODO_LIST.add(newData)
         insertionSort()
 
@@ -249,7 +248,15 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, B
         }
     }
 
-    fun updatePriorities(priority: Int) {
+    private fun updatePrioritiesOnDelete(priority: Int) {
+        for (todo in TODO_LIST) {
+            if (todo.priority >= priority) {
+                todo.priority -= 1
+            }
+        }
+    }
+
+    private fun updatePrioritiesOnInsert(priority: Int) {
         for (todo in TODO_LIST) {
             if (todo.priority >= priority) {
                 todo.priority += 1
@@ -257,26 +264,25 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, B
         }
     }
 
-    fun insertionSort() {
-        if (TODO_LIST.isEmpty() || TODO_LIST.size<2){
+    private fun insertionSort() {
+        if (TODO_LIST.size >= 2) {
 
-        for (count in 1..TODO_LIST.count() - 1){
-            // println(items)
-            val item = TODO_LIST[count].priority
-            var i = count
-            while (i > 0 && item < TODO_LIST[i - 1].priority){
-                TODO_LIST[i].priority = TODO_LIST[i - 1].priority
-                i -= 1
-            }
-            TODO_LIST[i].priority = item
+            for (count in 1..TODO_LIST.size-1){
+                val item = TODO_LIST[count].priority
+                var i = count
 
+                while (i > 0 && item < TODO_LIST[i - 1].priority){
+                    TODO_LIST[i].priority = TODO_LIST[i - 1].priority
+                    i -= 1
+                }
+                TODO_LIST[i].priority = item
             }
         }
     }
 
-    fun printList() {
+    private fun printList() {
         for (todo in TODO_LIST) {
-            Log.d("Todo list contents", " ${todo.priority}. ${todo.toString()}")
+            Log.d("TODO_LIST contents", " ${todo.priority}. ${todo.toString()}")
         }
     }
 
