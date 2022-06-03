@@ -108,6 +108,14 @@ class EnterTodoDialogFragment : Fragment() {
         val okButton = view.findViewById<Button>(R.id.button)
         okButton.setOnClickListener {
             listener?.todoEntered(localDate, hour, minute, name, comment, priority)
+
+            // Reset values
+            localDate = LocalDate.of(today.get(Calendar.YEAR), today.get(Calendar.MONTH)+1, today.get(Calendar.DAY_OF_MONTH))
+            hour = 23
+            minute = 59
+            name = ""
+            comment = ""
+            priority = -1
         }
 
         return view

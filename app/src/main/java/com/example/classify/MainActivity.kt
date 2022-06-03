@@ -29,10 +29,14 @@ import androidx.core.app.ActivityCompat
 
 lateinit var MAINACTIVITY: MainActivity
 var balance = 0
-class MainActivity : AppCompatActivity(), SensorEventListener {
+var food = 6
+var happiness = 0
+
+class MainActivity : AppCompatActivity(), SensorEventListener, BalanceListener {
     lateinit var balanceText: TextView
     lateinit var stepsText: TextView
     lateinit var sf: SharedPreferences
+    lateinit var dialFrag: AboutFragment
     private var sensorManager: SensorManager? = null
     private var running = false
     private var totalSteps = 0f
@@ -80,10 +84,10 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         }
     }
 
-    fun updateBalance(newBalance: Int) {
-        balance = newBalance
-        val newBalText = "\$$balance"
-        balanceText.text = newBalText
+    override fun onAddBalance(value: Int) {
+        balance += value
+        balanceText.text = "$${balance}"
+        Log.d("todo removed", "balance = $balance")
         with(sf.edit()) {
             putInt("balance", balance)
             apply()
@@ -98,12 +102,22 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         }
     }
 
+    fun updateBalance(newBalance: Int) {
+        balance = newBalance
+        val newBalText = "\$$balance"
+        balanceText.text = newBalText
+        with(sf.edit()) {
+            putInt("balance", balance)
+            apply()
+        }
+    }
+
     override fun onSensorChanged(event: SensorEvent?) {
         if(running) {
             totalSteps = event!!.values[0]
             Log.d("dirk", "$totalSteps")
             val currentSteps = totalSteps.toInt() - prevTotalSteps.toInt()
-            //updateBalance()
+            // updateBalance()
             stepsText.text = ("$currentSteps steps")
         }
     }
@@ -165,7 +179,10 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     }
 
     fun displayAbout() {
-
+            Log.d("main activity", "about option clicked")
+            dialFrag = AboutFragment.newInstance("hi", "bye")
+            dialFrag.show(supportFragmentManager, "Showing 'About' page")
+           // dialFrag.listener = this
     }
 
 }
