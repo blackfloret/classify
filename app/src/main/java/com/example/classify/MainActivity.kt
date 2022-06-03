@@ -29,6 +29,9 @@ import androidx.core.app.ActivityCompat
 
 lateinit var MAINACTIVITY: MainActivity
 var balance = 0
+var food = 6
+var happiness = 0
+
 class MainActivity : AppCompatActivity(), SensorEventListener {
     lateinit var balanceText: TextView
     lateinit var stepsText: TextView
