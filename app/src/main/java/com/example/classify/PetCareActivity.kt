@@ -75,8 +75,8 @@ class PetCareActivity : AppCompatActivity(), BalanceListener {
 
         PETCARE_ACTIVITY = this
 
-        var dropPic1 = findViewById<ImageView>(R.id.drop1)
-        var dropPic2 = findViewById<ImageView>(R.id.drop2)
+//        var dropPic1 = findViewById<ImageView>(R.id.drop1)
+//        var dropPic2 = findViewById<ImageView>(R.id.drop2)
 
         balanceText = findViewById(R.id.balance_text)
         stepsText = findViewById(R.id.steps_text)
@@ -102,13 +102,13 @@ class PetCareActivity : AppCompatActivity(), BalanceListener {
         var nextAvail = hour
         var ableToWater = nextAvail - hour <= 0
 
-        if(ableToWater){
-            dropPic1.isVisible = true
-            dropPic2.isVisible = true
-        } else {
-            dropPic1.isVisible = false
-            dropPic2.isVisible = false
-        }
+//        if(ableToWater){
+//            dropPic1.isVisible = true
+//            dropPic2.isVisible = true
+//        } else {
+//            dropPic1.isVisible = false
+//            dropPic2.isVisible = false
+//        }
 
         feedButton.setOnClickListener{
             if(food >= 3){
@@ -141,8 +141,8 @@ class PetCareActivity : AppCompatActivity(), BalanceListener {
                 Toast.makeText(applicationContext,text, duration).show()
                 updateHeart()
 
-                dropPic1.isVisible = false
-                dropPic2.isVisible = false
+//                dropPic1.isVisible = false
+//                dropPic2.isVisible = false
 
             } else {
                 if(nextAvail > 1){
