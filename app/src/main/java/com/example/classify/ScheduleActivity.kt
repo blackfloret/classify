@@ -195,6 +195,8 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, B
         stepsText.visibility = VISIBLE
 
         supportFragmentManager.beginTransaction().remove(dialfrag).commit()
+        adapter = MyTodoListRecyclerViewAdapter(TODO_LIST)
+        recycler.setAdapter(adapter)
         fab.visibility = VISIBLE
 
         runOnUiThread {
