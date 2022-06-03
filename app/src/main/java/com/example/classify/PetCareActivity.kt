@@ -1,16 +1,16 @@
 package com.example.classify
 
 
-import android.graphics.drawable.Animatable2
+
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.util.Log
-import android.view.animation.Animation
-import android.view.animation.Animation.AnimationListener
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import java.util.*
 import kotlin.random.Random
 
 
@@ -19,6 +19,7 @@ class PetCareActivity : AppCompatActivity(){
     private lateinit var petAnimation: AnimationDrawable
     private lateinit var eatAnimation: AnimationDrawable
     lateinit var petPic: ImageView
+    lateinit var heartPic: ImageView
 
     private fun feeding (){
         petPic.clearAnimation()
@@ -38,13 +39,37 @@ class PetCareActivity : AppCompatActivity(){
         }
     }
 
+    private fun updateHeart(){
+        if(happiness >= 95){
+            heartPic.setImageResource(R.drawable.heart2)
+        } else if(happiness in 85..94){
+            heartPic.setImageResource(R.drawable.heart_90)
+        } else if(happiness in 75..84){
+            heartPic.setImageResource(R.drawable.heart_80)
+        } else if(happiness in 65..74){
+            heartPic.setImageResource(R.drawable.heart_65)
+        } else if(happiness in 45..64){
+            heartPic.setImageResource(R.drawable.heart_45)
+        } else if(happiness in 25..44){
+            heartPic.setImageResource(R.drawable.heart_25)
+        } else if(happiness in 10..43){
+            heartPic.setImageResource(R.drawable.heart_10)
+        } else {
+            heartPic.setImageResource(R.drawable.heart_0)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pet_care)
 
+        var dropPic1 = findViewById<ImageView>(R.id.drop1)
+        var dropPic2 = findViewById<ImageView>(R.id.drop2)
+
+        heartPic = findViewById(R.id.heart)
         petPic = findViewById(R.id.petPic)
         dancing()
-
+        updateHeart()
 
         val wordsHappy = listOf("Happy Pride!", "Di, Derrick, and Bec deserve an A!", "Cats Rule!", "Do you like my sick moves?", "I love this app!", "wee woo wee woo",
             "Live Laugh Love yourself", "Hams my favorite food!", "I am happy!", "Good vibes!", "Having a great time!")
@@ -58,6 +83,18 @@ class PetCareActivity : AppCompatActivity(){
         var text: String
 
         val feedButton = findViewById<Button>(R.id.Feed_button)
+        var cal = Calendar.getInstance()
+        var hour = cal.get(Calendar.HOUR_OF_DAY)
+        var nextAvail = hour
+        var ableToWater = nextAvail - hour <= 0
+
+        if(ableToWater){
+            dropPic1.isVisible = true
+            dropPic2.isVisible = true
+        } else {
+            dropPic1.isVisible = false
+            dropPic2.isVisible = false
+        }
 
         feedButton.setOnClickListener{
             if(food >= 3){
@@ -66,12 +103,12 @@ class PetCareActivity : AppCompatActivity(){
                 if(happiness < 98){
                     happiness += 3
                 }
-
                 feeding()
 
                 text = "Yummy food!"
                 Toast.makeText(applicationContext,text, duration).show()
                 Log.d("PETTEST", "TOAST FOOD")
+                updateHeart()
 
             } else {
                 text = "Not enough food :("
@@ -81,9 +118,28 @@ class PetCareActivity : AppCompatActivity(){
         }
         val waterButton = findViewById<Button>(R.id.water_button)
         waterButton.setOnClickListener{
-            text = "Slurp!"
-            Toast.makeText(applicationContext,text, duration).show()
-            Log.d("PETTEST", "TOAST WATER")
+            hour = cal.get(Calendar.HOUR_OF_DAY)
+            if(ableToWater){
+                nextAvail += 4
+                text = "Slurp!"
+                happiness += 4
+                Log.d("PETTEST","Drinking!")
+                Toast.makeText(applicationContext,text, duration).show()
+                updateHeart()
+
+                dropPic1.isVisible = false
+                dropPic2.isVisible = false
+
+            } else {
+                if(nextAvail > 1){
+                    text = "Not thirsty.. wait $nextAvail more hours"
+                } else {
+                    text = "Not thirsty.. wait less than an hour!"
+                }
+                Toast.makeText(applicationContext,text, duration).show()
+                Log.d("PETTEST","WAIT ${nextAvail-hour}")
+            }
+
             dancing()
         }
 
@@ -109,6 +165,7 @@ class PetCareActivity : AppCompatActivity(){
                 happiness += 1
             }
             dancing()
+            updateHeart()
 
         }
 
