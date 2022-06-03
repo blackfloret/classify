@@ -48,6 +48,7 @@ class MyTodoListRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         var value: Int = -1
+
         val item = values[position]
 
         // Remove the todoItem from RecyclerView AND database
@@ -72,7 +73,7 @@ class MyTodoListRecyclerViewAdapter(
         if (period.days <= 1) {
             holder.moneyView.text = "+1"
             value = 1
-        } else if (period.days <= 3) {
+        } else if (period.days <= 4) {
             holder.moneyView.text = "+5"
             value = 5
         } else {
@@ -80,7 +81,7 @@ class MyTodoListRecyclerViewAdapter(
             value = 10
         }
 
-        // Priority
+        // Priority and Name
         holder.nameView.text = item.priority.toString() + ". " + item.name
 
         // Date

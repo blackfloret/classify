@@ -30,7 +30,7 @@ var priority: Int = -1
 // Define a listener interface for this fragment
 interface EnterTodoListener {
     // Listeners all implement this interface
-    fun todoEntered(localDate: LocalDate, hour: Int, minute: Int, name: String, comment: String, priority: Int)
+    fun onTodoEntered(localDate: LocalDate, hour: Int, minute: Int, name: String, comment: String, priority: Int)
 }
 
 /**
@@ -61,6 +61,8 @@ class EnterTodoDialogFragment : Fragment() {
 
         // Time Picker - Begin time of task
         val timePicker = view.findViewById<TimePicker>(R.id.timeView)
+        timePicker.setCurrentHour(23)
+        timePicker.setCurrentMinute(59)
         timePicker.setOnTimeChangedListener { TimePicker, h, m ->
                 hour = h
                 minute = m
@@ -97,7 +99,7 @@ class EnterTodoDialogFragment : Fragment() {
         val numPicker = view.findViewById<NumberPicker>(R.id.number_picker)
         numPicker.setMinValue(1)
         numPicker.setMaxValue(priority)
-        numPicker.setValue(1)
+        numPicker.setValue(priority)
         numPicker.setOnValueChangedListener { numberPicker, i, i2 ->
             priority = i2
             Log.d("dialog frag", "priority (which is set to i2): $i, $i2")
@@ -107,7 +109,7 @@ class EnterTodoDialogFragment : Fragment() {
         // Button - Finalize task
         val okButton = view.findViewById<Button>(R.id.button)
         okButton.setOnClickListener {
-            listener?.todoEntered(localDate, hour, minute, name, comment, priority)
+            listener?.onTodoEntered(localDate, hour, minute, name, comment, priority)
 
             // Reset values
             localDate = LocalDate.of(today.get(Calendar.YEAR), today.get(Calendar.MONTH)+1, today.get(Calendar.DAY_OF_MONTH))
