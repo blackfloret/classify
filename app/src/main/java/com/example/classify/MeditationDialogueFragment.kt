@@ -10,8 +10,10 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import org.json.JSONObject
+import java.lang.Thread.sleep
 import java.net.URL
 import kotlin.concurrent.thread
+import kotlin.concurrent.timer
 
 interface MeditationListener {
     fun endMeditation(duration: Int)
@@ -32,6 +34,7 @@ private const val ARG_PARAM2 = "param2"
 class MeditationDialogueFragment : Fragment() {
     // TODO: Rename and change types of parameters
     var listener: MeditationListener? = null
+    val cache_size = 30
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,30 +63,33 @@ class MeditationDialogueFragment : Fragment() {
         val quoteText: TextView = view.findViewById(R.id.quote_text)
         val authorText: TextView = view.findViewById(R.id.author_text)
         val dbman = getContext()?.let { QuoteDatabaseManager(it) }
-        quoteText.text = "TEST"
         var newQuote = dbman?.getQuote()
         newQuote?.let {
             val qt = newQuote.text
-            quoteText.text = "qt"
+            quoteText.text = qt
             val at = newQuote.author
             authorText.text = at
             Log.d("dirk", at)
             Log.d("dirk", qt)
         } ?: run {
             thread {
-                for (i in 0..100) {
+                Log.d("dirk","Filling table")
+                timer(period=2000) {
                     val quoteInfo = JSONObject(quoteUrl.readText())
                     val insertQuote: Quote = Quote(quoteInfo.getString("quoteText"), quoteInfo.getString("quoteAuthor"))
                     dbman?.insert(insertQuote)
+                    if(dbman?.getSize()!! >= cache_size) {
+                        cancel()
+                    }
                 }
+                sleep(2000)
                 val newQuote = dbman?.getQuote()
                 activity?.runOnUiThread {
                     newQuote?.let {
-                        //quoteText.text = "${newQuote.text}"
-                        //authorText.text = "${newQuote.author}"
+                        quoteText.text = "${newQuote.text}"
+                        authorText.text = "${newQuote.author}"
                     }
                 }
-
             }
         }
         return view

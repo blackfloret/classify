@@ -29,10 +29,12 @@ class QuoteDatabaseManager(context: Context) : SQLiteOpenHelper(context, "QuoteD
 
     fun insert(quote: Quote) {
         writableDatabase.execSQL("INSERT INTO QUOTES VALUES(\"${quote.text}\",\"${quote.author}\")")
+        Log.d("dirk", "New table size: ${getSize()}")
     }
 
     @SuppressLint("Range")
     fun getQuote(): Quote? {
+        Log.d("dirk", getSize().toString())
         val cursor = writableDatabase.rawQuery("SELECT * FROM QUOTES LIMIT 1", null)
         if(cursor.getCount() == 0) {
             cursor.close()
@@ -48,6 +50,13 @@ class QuoteDatabaseManager(context: Context) : SQLiteOpenHelper(context, "QuoteD
         return result
     }
 
+    fun getSize(): Int {
+        val cursor = writableDatabase.rawQuery("SELECT COUNT(DISTINCT quote) FROM QUOTES", null)
+        cursor.moveToFirst()
+        val result = cursor.getString(0).toInt()
+        cursor.close()
+        return result
+    }
 }
 
 class MeditationActivity : AppCompatActivity(), MeditationListener {
