@@ -6,8 +6,6 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.os.Bundle
 import android.util.Log
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,6 +33,7 @@ class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null
         val db = this.writableDatabase
         db.execSQL("DELETE FROM TODOS")
         db.close()
+        Log.d("database", "table cleared")
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { }
@@ -43,10 +42,10 @@ class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null
         val db = this.writableDatabase
         db.execSQL("UPDATE TODOS SET PRIORITY = PRIORITY + 1 WHERE PRIORITY >= ${priority} ")
         db.close()
-        Log.d("database", "todo prioties updated")
+        Log.d("database", "todo priorities updated")
     }
 
-    // Delete TodoData info from the database
+    // Delete TodoData info from the database using priority since it's the unique primary key
     fun onDelete(priority: Int) {
         val db = this.writableDatabase
         db.delete("TODOS", "PRIORITY" + "=" + priority, null)
@@ -105,9 +104,6 @@ class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null
             val name = cursor.getString(4)
             val comment = cursor.getString(5)
 
-            val str = "$dateStr, $hour:$min, $name, $comment, $priority"
-            Log.d("database", "todo read: $str")
-
             val todoItem = ToDoData(date, hour, min, name, comment, priority)
             Log.d("database", "todo read and converted to: ${todoItem.toString()}")
             result.add(todoItem)
@@ -150,7 +146,6 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, B
         SCHEDULEACTIVITY = this
 
         balanceText = findViewById(R.id.balance_text)
-//        balanceText.text = "$${balance}"
         stepsText = findViewById(R.id.steps_text)
 
         database = MyDatabaseManager(this)
@@ -176,11 +171,6 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, B
             supportFragmentManager.beginTransaction().apply {
                 replace(R.id.TodoDialogFrag, dialfrag, "enter todo dialog frag")
                 commit()
-
-                balanceText.visibility = INVISIBLE
-                stepsText.visibility = INVISIBLE
-                recycler.setAdapter(null)
-                fab.visibility = INVISIBLE
                 Log.d("schedule activity", "inflated enter todo dialog")
             }
         }
@@ -209,9 +199,6 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, B
         Log.d("todo removed", "db updated, todo was removed")
         printList()
 
-        adapter = MyTodoListRecyclerViewAdapter(TODO_LIST)
-        recycler.setAdapter(adapter)
-
         runOnUiThread {
             // Then tell adapter that data has changed
             adapter.notifyDataSetChanged()
@@ -234,13 +221,7 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, B
         Log.d("schedule activity", "db updated, todo was inserted")
         printList()
 
-        balanceText.visibility = VISIBLE
-        stepsText.visibility = VISIBLE
-
         supportFragmentManager.beginTransaction().remove(dialfrag).commit()
-        adapter = MyTodoListRecyclerViewAdapter(TODO_LIST)
-        recycler.setAdapter(adapter)
-        fab.visibility = VISIBLE
 
         runOnUiThread {
             // Then tell adapter that data has changed
@@ -287,8 +268,6 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, B
     }
 
     override fun onStop() {
-        database.clearDatabase()
-
         for (todo in TODO_LIST) {
             database.insert(todo)
         }
@@ -298,8 +277,6 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, B
     }
 
     override fun onDestroy() {
-        database.clearDatabase()
-
         for (todo in TODO_LIST) {
             database.insert(todo)
         }
