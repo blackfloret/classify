@@ -230,9 +230,9 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, B
         updatePriorities(newData.priority)
         TODO_LIST.add(newData)
         insertionSort()
-        printList()
 
         Log.d("schedule activity", "db updated, todo was inserted")
+        printList()
 
         balanceText.visibility = VISIBLE
         stepsText.visibility = VISIBLE
@@ -298,7 +298,7 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, B
         for (todo in TODO_LIST) {
             database.insert(todo)
         }
-        
+
         printList()
         TODO_LIST = arrayListOf<ToDoData>()
 
