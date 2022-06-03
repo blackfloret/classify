@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -100,6 +101,8 @@ class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null
 
 
 class ScheduleActivity : AppCompatActivity(), AdapterListener, EnterTodoListener {
+    lateinit var balanceText: TextView
+    lateinit var stepsText: TextView
     lateinit var recycler: RecyclerView
     lateinit var adapter: MyTodoListRecyclerViewAdapter
     lateinit var dialfrag: EnterTodoDialogFragment
@@ -115,6 +118,9 @@ class ScheduleActivity : AppCompatActivity(), AdapterListener, EnterTodoListener
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_schedule)
+
+        balanceText = findViewById(R.id.balance_text)
+        stepsText = findViewById(R.id.steps_text)
 
         database = MyDatabaseManager(this)
         val allRows = database.readAllRows()
@@ -137,6 +143,8 @@ class ScheduleActivity : AppCompatActivity(), AdapterListener, EnterTodoListener
                 replace(R.id.TodoDialogFrag, dialfrag, "enter todo dialog frag")
                 commit()
 
+                balanceText.visibility = INVISIBLE
+                stepsText.visibility = INVISIBLE
                 recycler.setAdapter(null)
                 fab.visibility = INVISIBLE
                 Log.d("schedule activity", "inflated enter todo")
@@ -173,6 +181,8 @@ class ScheduleActivity : AppCompatActivity(), AdapterListener, EnterTodoListener
         TODO_LIST = ArrayList(allRows)
         Log.d("schedule activity", "db updated, todo was inserted")
 
+        balanceText.visibility = VISIBLE
+        stepsText.visibility = VISIBLE
         supportFragmentManager.beginTransaction().remove(dialfrag).commit()
         adapter = MyTodoListRecyclerViewAdapter(TODO_LIST)
         recycler.setAdapter(adapter)
