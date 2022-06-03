@@ -14,34 +14,59 @@
         android:id="@+id/x_button"
         android:layout_width="28dp"
         android:layout_height="27dp"
+        android:layout_centerVertical="true"
         android:layout_gravity="right|center_vertical"
         android:layout_marginStart="23dp"
         android:layout_marginTop="17dp"
         android:layout_marginEnd="12dp"
-        android:layout_centerVertical="true"
-        android:background="@drawable/x_white_dropshadow"
-        />
+        android:background="@drawable/x_white_dropshadow" />
 
     <TextView
         android:id="@+id/todo_name"
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="17dp"
-        android:layout_marginEnd="16dp"
         android:layout_toEndOf="@id/x_button"
         android:layout_toRightOf="@id/x_button"
-        android:layout_alignParentRight="true"
-        android:text="23. First Exam"
-        android:textSize="16sp"
-        android:textColor="@color/white"
-        android:fontFamily="@font/press_start_2p"
         android:shadowColor="@color/black"
         android:shadowDx="5"
         android:shadowDy="5"
         android:shadowRadius="0.1"
-        />
+        android:text="23. First Exam"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
 
-    <ImageView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="right"
+        >
+        <TextView
+            android:id="@+id/coin_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:shadowColor="@color/black"
+            android:shadowDx="5"
+            android:shadowDy="5"
+            android:shadowRadius="0.1"
+            android:text="+10"
+            android:textColor="@color/white"
+            android:textSize="12dp"/>
+
+        <ImageView
+            android:id="@+id/money_pic"
+            android:layout_width="20sp"
+            android:layout_height="20sp"
+            android:layout_marginTop="18dp"
+            android:layout_gravity="top|right"
+            android:layout_marginRight="12dp"
+            android:src="@drawable/dollar_dropshadow" />
+    </LinearLayout>
+
+
+<ImageView
         android:id="@+id/cal_pic"
         android:layout_width="20dp"
         android:layout_height="20dp"
@@ -87,21 +112,20 @@
         android:id="@+id/todo_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/clock_pic"
         android:layout_below="@+id/todo_date"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginStart="10dp"
-        android:gravity="center"
-        android:text="11:59 pm"
-        android:textColor="@color/white"
-        android:textSize="12sp"
+        android:layout_toEndOf="@+id/clock_pic"
         android:fontFamily="@font/press_start_2p"
+        android:gravity="center"
         android:shadowColor="@color/black"
         android:shadowDx="5"
         android:shadowDy="5"
         android:shadowRadius="0.1"
-        />
+        android:text="11:59 pm"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
 
     <ImageView
         android:id="@+id/comment_pic"
@@ -121,17 +145,16 @@
         android:layout_below="@+id/todo_time"
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="32dp"
         android:layout_toEndOf="@+id/comment_pic"
         android:fontFamily="@font/press_start_2p"
-        android:text="Comment about assignment goes here"
-        android:textColor="@color/white"
-        android:textSize="12sp"
         android:shadowColor="@color/black"
         android:shadowDx="5"
         android:shadowDy="5"
         android:shadowRadius="0.1"
-        />
+        android:text="Comment about assignment goes here"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
 
 <!--    <TextView-->
 <!--        android:id="@+id/border"-->

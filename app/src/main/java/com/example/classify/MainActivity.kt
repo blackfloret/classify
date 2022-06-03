@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     lateinit var balanceText: TextView
     lateinit var stepsText: TextView
     lateinit var sf: SharedPreferences
+    lateinit var dialFrag: AboutFragment
     private var sensorManager: SensorManager? = null
     private var running = false
     private var totalSteps = 0f
@@ -165,7 +166,10 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     }
 
     fun displayAbout() {
-
+            Log.d("main activity", "about option clicked")
+            dialFrag = AboutFragment.newInstance("hi", "bye")
+            dialFrag.show(supportFragmentManager, "Showing 'About' page")
+           // dialFrag.listener = this
     }
 
 }
