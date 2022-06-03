@@ -204,7 +204,10 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, B
             }
         }
         updatePriorities(priority)
+        insertionSort()
+
         Log.d("todo removed", "db updated, todo was removed")
+        printList()
 
         adapter = MyTodoListRecyclerViewAdapter(TODO_LIST)
         recycler.setAdapter(adapter)
@@ -224,8 +227,10 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, B
         priority: Int
     ) {
         val newData = ToDoData(localDate, hour, minute, name, comment, priority)
-        TODO_LIST.add(newData)
         updatePriorities(newData.priority)
+        TODO_LIST.add(newData)
+        insertionSort()
+        printList()
 
         Log.d("schedule activity", "db updated, todo was inserted")
 
@@ -251,19 +256,52 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, B
         }
     }
 
-    fun printList() {
+    fun insertionSort() {
+        if (TODO_LIST.isEmpty() || TODO_LIST.size<2){
 
+        for (count in 1..TODO_LIST.count() - 1){
+            // println(items)
+            val item = TODO_LIST[count].priority
+            var i = count
+            while (i > 0 && item < TODO_LIST[i - 1].priority){
+                TODO_LIST[i].priority = TODO_LIST[i - 1].priority
+                i -= 1
+            }
+            TODO_LIST[i].priority = item
+
+            }
+        }
+    }
+
+    fun printList() {
+        for (todo in TODO_LIST) {
+            Log.d("Todo list contents", " ${todo.priority}. ${todo.toString()}")
+        }
     }
 
     override fun onStop() {
         database.clearDatabase()
-        database.insertAll()
+
+        for (todo in TODO_LIST) {
+            database.insert(todo)
+        }
+
+        printList()
+        TODO_LIST = arrayListOf<ToDoData>()
+
         super.onStop()
     }
 
     override fun onDestroy() {
         database.clearDatabase()
-        database.insertAll()
+
+        for (todo in TODO_LIST) {
+            database.insert(todo)
+        }
+        
+        printList()
+        TODO_LIST = arrayListOf<ToDoData>()
+
         super.onDestroy()
     }
 }
