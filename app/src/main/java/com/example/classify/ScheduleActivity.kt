@@ -100,7 +100,7 @@ class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null
 }
 
 
-class ScheduleActivity : AppCompatActivity(), AdapterListener, EnterTodoListener {
+class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, BalanceListener {
     lateinit var balanceText: TextView
     lateinit var stepsText: TextView
     lateinit var recycler: RecyclerView
@@ -120,6 +120,7 @@ class ScheduleActivity : AppCompatActivity(), AdapterListener, EnterTodoListener
         setContentView(R.layout.activity_schedule)
 
         balanceText = findViewById(R.id.balance_text)
+        balanceText.text = "$${balance}"
         stepsText = findViewById(R.id.steps_text)
 
         database = MyDatabaseManager(this)
@@ -127,7 +128,8 @@ class ScheduleActivity : AppCompatActivity(), AdapterListener, EnterTodoListener
         TODO_LIST = ArrayList(allRows)
 
         adapter = MyTodoListRecyclerViewAdapter(TODO_LIST)
-        adapter.listener = this
+        adapter.todoListener = this
+        adapter.balanceListener = this
 
         recycler = findViewById(R.id.TodoRecyler)
         recycler.adapter = adapter
@@ -152,6 +154,12 @@ class ScheduleActivity : AppCompatActivity(), AdapterListener, EnterTodoListener
         }
     }
 
+    override fun onAddBalance(value: Int) {
+        balance += value
+        balanceText.text = "$${balance}"
+        Log.d("todo removed", "balance = $balance")
+    }
+
     override fun onTodoClick(position: Int) {
         // The onClick implementation of the RecyclerView item click
     }
@@ -160,10 +168,12 @@ class ScheduleActivity : AppCompatActivity(), AdapterListener, EnterTodoListener
         database.onDelete(priority)
         val allRows = database.readAllRows()
         TODO_LIST = ArrayList(allRows)
-        Log.d("schedule activity", "db updated, todo was removed")
+        Log.d("todo removed", "db updated, todo was removed")
 
-        adapter = MyTodoListRecyclerViewAdapter(TODO_LIST)
-        recycler.setAdapter(adapter)
+        runOnUiThread {
+            // Then tell adapter that data has changed
+            adapter.notifyDataSetChanged()
+        }
     }
 
     override fun todoEntered(
@@ -183,9 +193,8 @@ class ScheduleActivity : AppCompatActivity(), AdapterListener, EnterTodoListener
 
         balanceText.visibility = VISIBLE
         stepsText.visibility = VISIBLE
+
         supportFragmentManager.beginTransaction().remove(dialfrag).commit()
-        adapter = MyTodoListRecyclerViewAdapter(TODO_LIST)
-        recycler.setAdapter(adapter)
         fab.visibility = VISIBLE
 
         runOnUiThread {
