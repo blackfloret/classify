@@ -32,7 +32,7 @@ var balance = 0
 var food = 6
 var happiness = 0
 
-class MainActivity : AppCompatActivity(), SensorEventListener {
+class MainActivity : AppCompatActivity(), SensorEventListener, BalanceListener {
     lateinit var balanceText: TextView
     lateinit var stepsText: TextView
     lateinit var sf: SharedPreferences
@@ -84,10 +84,10 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         }
     }
 
-    fun updateBalance(newBalance: Int) {
-        balance = newBalance
-        val newBalText = "\$$balance"
-        balanceText.text = newBalText
+    override fun onAddBalance(value: Int) {
+        balance += value
+        balanceText.text = "$${balance}"
+        Log.d("todo removed", "balance = $balance")
         with(sf.edit()) {
             putInt("balance", balance)
             apply()
@@ -102,12 +102,22 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         }
     }
 
+    fun updateBalance(newBalance: Int) {
+        balance = newBalance
+        val newBalText = "\$$balance"
+        balanceText.text = newBalText
+        with(sf.edit()) {
+            putInt("balance", balance)
+            apply()
+        }
+    }
+
     override fun onSensorChanged(event: SensorEvent?) {
         if(running) {
             totalSteps = event!!.values[0]
             Log.d("dirk", "$totalSteps")
             val currentSteps = totalSteps.toInt() - prevTotalSteps.toInt()
-            //updateBalance()
+            // updateBalance()
             stepsText.text = ("$currentSteps steps")
         }
     }

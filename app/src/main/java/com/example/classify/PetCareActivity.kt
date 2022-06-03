@@ -7,19 +7,29 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import java.util.*
 import kotlin.random.Random
 
+lateinit var PETCARE_ACTIVITY: PetCareActivity
 
-class PetCareActivity : AppCompatActivity(){
+class PetCareActivity : AppCompatActivity(), BalanceListener {
 
     private lateinit var petAnimation: AnimationDrawable
     private lateinit var eatAnimation: AnimationDrawable
     lateinit var petPic: ImageView
     lateinit var heartPic: ImageView
+    lateinit var balanceText: TextView
+    lateinit var stepsText: TextView
+
+    override fun onAddBalance(value: Int) {
+        balance += value
+        balanceText.text = "$${balance}"
+        Log.d("todo removed", "balance = $balance")
+    }
 
     private fun feeding (){
         petPic.clearAnimation()
@@ -63,9 +73,13 @@ class PetCareActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pet_care)
 
+        PETCARE_ACTIVITY = this
+
         var dropPic1 = findViewById<ImageView>(R.id.drop1)
         var dropPic2 = findViewById<ImageView>(R.id.drop2)
 
+        balanceText = findViewById(R.id.balance_text)
+        stepsText = findViewById(R.id.steps_text)
         heartPic = findViewById(R.id.heart)
         petPic = findViewById(R.id.petPic)
         dancing()

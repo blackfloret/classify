@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.time.LocalDate
 
+
+
 class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null, 1) {
     // If there's no database already, create one
     override fun onCreate(db: SQLiteDatabase?) {
@@ -129,7 +131,9 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, B
 
         adapter = MyTodoListRecyclerViewAdapter(TODO_LIST)
         adapter.todoListener = this
-        adapter.balanceListener = this
+        adapter.balanceListenerSchedule = this
+//        adapter.balanceListenerMain = MAINACTIVITY
+//        adapter.balanceListenerPetCare = PETCARE_ACTIVITY
 
         recycler = findViewById(R.id.TodoRecyler)
         recycler.adapter = adapter
@@ -155,9 +159,11 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, B
     }
 
     override fun onAddBalance(value: Int) {
-        balance += value
-        balanceText.text = "$${balance}"
-        Log.d("todo removed", "balance = $balance")
+        runOnUiThread {
+            balance += value
+            balanceText.text = "$${balance}"
+            Log.d("todo removed", "balance = $balance")
+        }
     }
 
     override fun onTodoClick(position: Int) {
@@ -169,6 +175,8 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, B
         val allRows = database.readAllRows()
         TODO_LIST = ArrayList(allRows)
         Log.d("todo removed", "db updated, todo was removed")
+
+        adapter = MyTodoListRecyclerViewAdapter(TODO_LIST)
 
         runOnUiThread {
             // Then tell adapter that data has changed
