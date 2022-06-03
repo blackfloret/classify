@@ -119,7 +119,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         val stepSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
 
         if(stepSensor == null) {
-            Toast.makeText(this, "Pedometer unable to be accessed", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this, "Pedometer unable to be accessed", Toast.LENGTH_SHORT).show()
         } else {
             sensorManager?.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL)
         }
