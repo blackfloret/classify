@@ -16,7 +16,7 @@ import com.example.classify.ScheduleActivity.Companion.TODO_LIST
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.time.LocalDate
 
-
+lateinit var SCHEDULEACTIVITY: ScheduleActivity
 
 class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null, 1) {
     // If there's no database already, create one
@@ -80,15 +80,7 @@ class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null
 
         val values = ContentValues()
         for (todo in TODO_LIST) {
-            values.put("PRIORITY", todo.priority)
-            values.put("DATE", todo.date.toString())
-            values.put("HOUR", todo.hour)
-            values.put("MINUTE", todo.minute)
-            values.put("NAME", todo.name)
-            values.put("COMMENT", todo.comment)
-
-            val success = db.insert("TODOS", null, values)
-            Log.d("schedule activity", "todo inserted: ${todo.toString()}")
+            insert(todo)
         }
 
         db.close()
@@ -155,6 +147,8 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, B
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_schedule)
 
+        SCHEDULEACTIVITY = this
+
         balanceText = findViewById(R.id.balance_text)
         balanceText.text = "$${balance}"
         stepsText = findViewById(R.id.steps_text)
@@ -195,6 +189,7 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, B
     override fun onAddBalance(value: Int) {
         balance += value
         balanceText.text = "$${balance}"
+        MAINACTIVITY.updateBalance(balance)
         Log.d("todo removed", "balance = $balance")
     }
 
@@ -203,9 +198,12 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, B
     }
 
     override fun onTodoRemove(priority: Int) {
+        for (todo in TODO_LIST) {
+            if (todo.priority == priority){
+                TODO_LIST.remove(todo)
+            }
+        }
         updatePriorities(priority)
-        database.clearDatabase()
-        database.insertAll()
         Log.d("todo removed", "db updated, todo was removed")
 
         adapter = MyTodoListRecyclerViewAdapter(TODO_LIST)
@@ -226,13 +224,9 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, B
         priority: Int
     ) {
         val newData = ToDoData(localDate, hour, minute, name, comment, priority)
+        TODO_LIST.add(newData)
+        updatePriorities(newData.priority)
 
-        if (priority <= TODO_LIST.size){
-            database.onPriorityUpdate(priority)
-        }
-        database.insert(newData)
-        val allRows = database.readAllRows()
-        TODO_LIST = ArrayList(allRows)
         Log.d("schedule activity", "db updated, todo was inserted")
 
         balanceText.visibility = VISIBLE
@@ -255,6 +249,10 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, B
                 todo.priority += 1
             }
         }
+    }
+
+    fun printList() {
+
     }
 
     override fun onStop() {
