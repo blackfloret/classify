@@ -6,7 +6,7 @@ class ToDoData
      val minute: Int,
      val name: String,
      val comment: String,
-     val priority: Int
+     var priority: Int
     ) {
 
         override fun toString(): String {
