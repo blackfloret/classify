@@ -200,11 +200,13 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, B
     override fun onTodoRemove(priority: Int) {
         for (todo in TODO_LIST) {
             if (todo.priority == priority){
+                database.onDelete(priority)
                 TODO_LIST.remove(todo)
             }
         }
         updatePriorities(priority)
         insertionSort()
+        database.insertAll()
 
         Log.d("todo removed", "db updated, todo was removed")
         printList()
@@ -230,6 +232,7 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, B
         updatePriorities(newData.priority)
         TODO_LIST.add(newData)
         insertionSort()
+        database.insertAll()
 
         Log.d("schedule activity", "db updated, todo was inserted")
         printList()
@@ -279,29 +282,27 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener, B
         }
     }
 
-    override fun onStop() {
-        database.clearDatabase()
+//    override fun onStop() {
+//        database.clearDatabase()
+//
+//        for (todo in TODO_LIST) {
+//            database.insert(todo)
+//        }
+//
+//        printList()
+//
+//        super.onStop()
+//    }
 
-        for (todo in TODO_LIST) {
-            database.insert(todo)
-        }
-
-        printList()
-        TODO_LIST = arrayListOf<ToDoData>()
-
-        super.onStop()
-    }
-
-    override fun onDestroy() {
-        database.clearDatabase()
-
-        for (todo in TODO_LIST) {
-            database.insert(todo)
-        }
-
-        printList()
-        TODO_LIST = arrayListOf<ToDoData>()
-
-        super.onDestroy()
-    }
+//    override fun onDestroy() {
+//        database.clearDatabase()
+//
+//        for (todo in TODO_LIST) {
+//            database.insert(todo)
+//        }
+//
+//        printList()
+//
+//        super.onDestroy()
+//    }
 }
