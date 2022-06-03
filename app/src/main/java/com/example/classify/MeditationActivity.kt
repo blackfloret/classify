@@ -85,6 +85,7 @@ class MeditationActivity : AppCompatActivity(), MeditationListener {
 //        if(supportFragmentManager.findFragmentByTag("meditationDialogue")?.isAdded == true) {
 //            return
 //        }
+        MAINACTIVITY.updateBalance(balance + duration)
         Log.d("dirk","Ending meditation")
         val dialogueFragment: MeditationDialogueFragment = MeditationDialogueFragment.newInstance(this)
 
