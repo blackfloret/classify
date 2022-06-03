@@ -12,4 +12,6 @@
     <color name="baby_blue">#abdbe3</color>
     <color name="sunset_orange">#FFFD5E53</color>
     <color name="sky_blue">#FF87CEEB</color>
+    <color name="heart_red">#d30000</color>
+    <color name="android_grey">#3c3f41</color>
 </resources>
