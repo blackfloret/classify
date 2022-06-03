@@ -24,7 +24,6 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/meditationPageFragment"
-        android:name="com.example.classify.MeditationDialogueFragment"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -33,8 +32,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/meditationTitle"
-        tools:layout="@layout/fragment_meditation_dialogue" />
+        app:layout_constraintTop_toBottomOf="@+id/meditationTitle"/>
 
     <ImageView
         android:id="@+id/hill_background"
