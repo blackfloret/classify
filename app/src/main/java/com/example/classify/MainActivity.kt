@@ -28,19 +28,19 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 
 lateinit var MAINACTIVITY: MainActivity
+lateinit var sf: SharedPreferences
 var balance = 0
+var steps = 0
 var food = 6
 var happiness = 0
 
 class MainActivity : AppCompatActivity(), SensorEventListener, BalanceListener {
-    lateinit var balanceText: TextView
-    lateinit var stepsText: TextView
-    lateinit var sf: SharedPreferences
     lateinit var dialFrag: AboutFragment
     private var sensorManager: SensorManager? = null
     private var running = false
     private var totalSteps = 0f
     private var prevTotalSteps = 0f
+    lateinit var moneyStepsFragment: MoneyStepsFragment
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,14 +49,21 @@ class MainActivity : AppCompatActivity(), SensorEventListener, BalanceListener {
         MAINACTIVITY = this
 
         sf = getPreferences(Context.MODE_PRIVATE)
-        balanceText = findViewById(R.id.balance_text)
-        stepsText = findViewById(R.id.steps_text)
         val petCareButton: ImageView = findViewById(R.id.petCareButton)
         val meditationButton: ImageView = findViewById(R.id.meditateButton)
         val scheduleButton: ImageView = findViewById(R.id.scheduleButton)
 
+        moneyStepsFragment = MoneyStepsFragment()
+        supportFragmentManager.beginTransaction().apply {
+            add(R.id.moneyStepsFragmentContainerView, moneyStepsFragment, "moneySteps")
+            commit()
+        }
+
         updateBalance(sf.getInt("balance", 0))
         prevTotalSteps = sf.getFloat("prevSteps", 0f)
+
+        moneyStepsFragment.updateValues()
+
 
         if(ActivityCompat.checkSelfPermission(this, ACTIVITY_RECOGNITION) != PERMISSION_GRANTED) {
             requestPermissions(arrayOf(ACTIVITY_RECOGNITION), 1)
@@ -86,7 +93,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener, BalanceListener {
 
     override fun onAddBalance(value: Int) {
         balance += value
-        balanceText.text = "$${balance}"
+        moneyStepsFragment.updateValues()
         Log.d("todo removed", "balance = $balance")
         with(sf.edit()) {
             putInt("balance", balance)
@@ -104,8 +111,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener, BalanceListener {
 
     fun updateBalance(newBalance: Int) {
         balance = newBalance
-        val newBalText = "\$$balance"
-        balanceText.text = newBalText
+        moneyStepsFragment.updateValues()
         with(sf.edit()) {
             putInt("balance", balance)
             apply()
@@ -116,9 +122,9 @@ class MainActivity : AppCompatActivity(), SensorEventListener, BalanceListener {
         if(running) {
             totalSteps = event!!.values[0]
             Log.d("dirk", "$totalSteps")
-            val currentSteps = totalSteps.toInt() - prevTotalSteps.toInt()
+            steps = totalSteps.toInt() - prevTotalSteps.toInt()
             // updateBalance()
-            stepsText.text = ("$currentSteps steps")
+            moneyStepsFragment.updateValues()
         }
     }
 
@@ -150,7 +156,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener, BalanceListener {
         val remSteps = (totalSteps.toInt() - prevTotalSteps.toInt()) % 100
         updateBalance(balance + cashedSteps)
         prevTotalSteps = totalSteps - remSteps
-        stepsText.text = "$remSteps steps"
+        moneyStepsFragment.updateValues()
 
         with(sf.edit()) {
             putFloat("prevSteps", prevTotalSteps)

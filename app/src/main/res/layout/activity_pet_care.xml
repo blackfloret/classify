@@ -9,17 +9,18 @@
     >
 
     <ImageView
+        android:id="@+id/imageView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginBottom="2dp"
         android:scaleType="centerCrop"
         android:src="@drawable/gameboy_blank_trimmed"
-        android:layout_marginBottom="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/balance_text"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/balance_text"
@@ -72,11 +73,10 @@
         android:layout_width="192dp"
         android:layout_height="192dp"
         android:layout_gravity="center"
-        android:layout_marginBottom="-19dp"
         app:layout_constraintBottom_toBottomOf="@id/window_frame"
         app:layout_constraintEnd_toEndOf="@id/window_frame"
         app:layout_constraintStart_toStartOf="@id/window_frame"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/window_frame"
         app:layout_constraintVertical_bias="1.0" />
 
     <ImageView
@@ -94,13 +94,15 @@
         android:id="@+id/Feed_button"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="363dp"
         android:layout_marginBottom="296dp"
+        android:backgroundTint="@color/android_grey"
         android:text="Feed"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        android:backgroundTint="@color/android_grey"/>
+        app:layout_constraintTop_toTopOf="@id/window_frame" />
 
     <Button
         android:id="@+id/water_button"
