@@ -4,7 +4,10 @@ package com.example.classify
 
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
+import android.view.View
+import android.view.animation.Animation
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -12,6 +15,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import java.util.*
+import kotlin.concurrent.timer
 import kotlin.random.Random
 
 lateinit var PETCARE_ACTIVITY: PetCareActivity
@@ -24,6 +28,11 @@ class PetCareActivity : AppCompatActivity(), BalanceListener {
     lateinit var heartPic: ImageView
     lateinit var balanceText: TextView
     lateinit var stepsText: TextView
+    lateinit var waterDrop: ImageView
+    var waterTimer: Timer = Timer()
+    var dropInitialY = 0f
+    var dropFinalY = 0f
+
 
     override fun onAddBalance(value: Int) {
         balance += value
@@ -39,6 +48,32 @@ class PetCareActivity : AppCompatActivity(), BalanceListener {
             eatAnimation.start()
         }
 
+    }
+
+    fun watering() {
+//        waterDrop.isVisible = true
+//        waterDrop.translationY = dropInitialY
+//
+//        val dropRate = dropInitialY * 2f / (0.1f * 60f) / 100f
+//        waterTimer = timer(period = 2) {
+//            runOnUiThread {
+//                waterDrop.translationY += dropRate
+//            }
+//
+//        }
+//        waterDrop.isVisible = false
+
+        // Show drop
+        Handler(mainLooper).postDelayed(
+            { waterDrop.setImageResource(R.drawable.waterdrop_sprite) },
+            1
+        )
+
+        //Then make it transparent after 1 second
+        Handler(mainLooper).postDelayed(
+            { waterDrop.setImageResource(android.R.color.transparent) },
+            1000
+        )
     }
 
     private fun dancing (){
@@ -75,8 +110,9 @@ class PetCareActivity : AppCompatActivity(), BalanceListener {
 
         PETCARE_ACTIVITY = this
 
-//        var dropPic1 = findViewById<ImageView>(R.id.drop1)
-//        var dropPic2 = findViewById<ImageView>(R.id.drop2)
+        waterDrop = findViewById(R.id.drop)
+        dropInitialY = waterDrop.translationY
+        dropFinalY = dropInitialY * -1f
 
         balanceText = findViewById(R.id.balance_text)
         stepsText = findViewById(R.id.steps_text)
@@ -96,20 +132,12 @@ class PetCareActivity : AppCompatActivity(), BalanceListener {
         val duration = Toast.LENGTH_SHORT
         var text: String
 
-        val feedButton = findViewById<Button>(R.id.Feed_button)
         var cal = Calendar.getInstance()
         var hour = cal.get(Calendar.HOUR_OF_DAY)
         var nextAvail = hour
         var ableToWater = nextAvail - hour <= 0
 
-//        if(ableToWater){
-//            dropPic1.isVisible = true
-//            dropPic2.isVisible = true
-//        } else {
-//            dropPic1.isVisible = false
-//            dropPic2.isVisible = false
-//        }
-
+        val feedButton = findViewById<Button>(R.id.Feed_button)
         feedButton.setOnClickListener{
             if(food >= 3){
                 food -= 3
@@ -130,6 +158,8 @@ class PetCareActivity : AppCompatActivity(), BalanceListener {
                 Log.d("PETTEST", "TOAST FOOD")
             }
         }
+
+
         val waterButton = findViewById<Button>(R.id.water_button)
         waterButton.setOnClickListener{
             hour = cal.get(Calendar.HOUR_OF_DAY)
@@ -140,9 +170,7 @@ class PetCareActivity : AppCompatActivity(), BalanceListener {
                 Log.d("PETTEST","Drinking!")
                 Toast.makeText(applicationContext,text, duration).show()
                 updateHeart()
-
-//                dropPic1.isVisible = false
-//                dropPic2.isVisible = false
+                watering()
 
             } else {
                 if(nextAvail > 1){
