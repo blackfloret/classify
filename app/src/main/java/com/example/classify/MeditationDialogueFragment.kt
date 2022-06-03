@@ -1,20 +1,23 @@
 package com.example.classify
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
+import org.json.JSONObject
 import java.net.URL
+import kotlin.concurrent.thread
 
 interface MeditationListener {
     fun endMeditation(duration: Int)
     fun startMeditation(duration: Int)
 }
 
-val quoteUrl = URL("https://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=jsonp&jsonp=?")
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -40,6 +43,7 @@ class MeditationDialogueFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_meditation_dialogue, container, false)
+        val quoteUrl = URL("https://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json")
         val oneMinuteButton: ImageView = view.findViewById(R.id.one_minute)
         oneMinuteButton.setOnClickListener {
             listener?.startMeditation(1)
@@ -51,6 +55,36 @@ class MeditationDialogueFragment : Fragment() {
         val fiveMinuteButton: ImageView = view.findViewById(R.id.five_minutes)
         fiveMinuteButton.setOnClickListener {
             listener?.startMeditation(5)
+        }
+
+        val quoteText: TextView = view.findViewById(R.id.quote_text)
+        val authorText: TextView = view.findViewById(R.id.author_text)
+        val dbman = getContext()?.let { QuoteDatabaseManager(it) }
+        quoteText.text = "TEST"
+        var newQuote = dbman?.getQuote()
+        newQuote?.let {
+            val qt = newQuote.text
+            quoteText.text = "qt"
+            val at = newQuote.author
+            authorText.text = at
+            Log.d("dirk", at)
+            Log.d("dirk", qt)
+        } ?: run {
+            thread {
+                for (i in 0..100) {
+                    val quoteInfo = JSONObject(quoteUrl.readText())
+                    val insertQuote: Quote = Quote(quoteInfo.getString("quoteText"), quoteInfo.getString("quoteAuthor"))
+                    dbman?.insert(insertQuote)
+                }
+                val newQuote = dbman?.getQuote()
+                activity?.runOnUiThread {
+                    newQuote?.let {
+                        //quoteText.text = "${newQuote.text}"
+                        //authorText.text = "${newQuote.author}"
+                    }
+                }
+
+            }
         }
         return view
     }

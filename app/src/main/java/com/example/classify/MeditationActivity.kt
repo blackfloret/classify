@@ -1,14 +1,54 @@
 package com.example.classify
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteOpenHelper
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import org.json.JSONObject
+import org.w3c.dom.Text
 import java.net.URL
 import java.util.*
 import kotlin.concurrent.timer
 
+class Quote(val text: String, val author: String) {}
+
+class QuoteDatabaseManager(context: Context) : SQLiteOpenHelper(context, "QuoteDB", null, 1) {
+    override fun onCreate(db: SQLiteDatabase?) {
+        db?.execSQL("CREATE TABLE IF NOT EXISTS QUOTES(quote, author)")
+    }
+
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
+        TODO("Not yet implemented")
+    }
+
+    fun insert(quote: Quote) {
+        writableDatabase.execSQL("INSERT INTO QUOTES VALUES(\"${quote.text}\",\"${quote.author}\")")
+    }
+
+    @SuppressLint("Range")
+    fun getQuote(): Quote? {
+        val cursor = writableDatabase.rawQuery("SELECT * FROM QUOTES LIMIT 1", null)
+        if(cursor.getCount() == 0) {
+            cursor.close()
+            return null
+        }
+        cursor.moveToFirst()
+        Log.d("dirk", cursor.getCount().toString())
+        val quoteText = cursor.getString(0)
+        val authorText = cursor.getString(1)
+        val result = Quote(quoteText, authorText)
+        writableDatabase.execSQL("DELETE FROM QUOTES WHERE quote LIKE \"$quoteText\"")
+        cursor.close()
+        return result
+    }
+
+}
 
 class MeditationActivity : AppCompatActivity(), MeditationListener {
     var sunTimer: Timer = Timer()
@@ -28,7 +68,9 @@ class MeditationActivity : AppCompatActivity(), MeditationListener {
             add(R.id.meditationPageFragment, dialogueFragment, "meditationDialogue")
             commit()
         }
+
     }
+
 
     override fun endMeditation(duration: Int) {
 //        if(supportFragmentManager.findFragmentByTag("meditationDialogue")?.isAdded == true) {
