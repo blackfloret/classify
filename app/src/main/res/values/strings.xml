@@ -15,4 +15,7 @@
     <string name="_1">1</string>
     <string name="how_many_minutes_would_you_like_to_meditate">How many minutes would you like to meditate?</string>
     <string name="_5">5</string>
+    <string-array name="lone_priority_array">
+        <item>1</item>
+    </string-array>
 </resources>
