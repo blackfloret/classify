@@ -1,44 +1,28 @@
 package com.example.classify
 
-
-
+import android.content.Context
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
-import android.view.View
-import android.view.animation.Animation
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import java.util.*
-import kotlin.concurrent.timer
 import kotlin.random.Random
+
 
 lateinit var PETCARE_ACTIVITY: PetCareActivity
 
-class PetCareActivity : AppCompatActivity(), BalanceListener {
+class PetCareActivity : AppCompatActivity() {
 
+    private lateinit var moneyStepsFragment: MoneyStepsFragment
     private lateinit var petAnimation: AnimationDrawable
     private lateinit var eatAnimation: AnimationDrawable
     lateinit var petPic: ImageView
     lateinit var heartPic: ImageView
-    lateinit var balanceText: TextView
-    lateinit var stepsText: TextView
     lateinit var waterDrop: ImageView
-    var waterTimer: Timer = Timer()
-    var dropInitialY = 0f
-    var dropFinalY = 0f
-
-
-    override fun onAddBalance(value: Int) {
-        balance += value
-        balanceText.text = "$${balance}"
-        Log.d("todo removed", "balance = $balance")
-    }
+    private var prevTotalSteps = 0f
 
     private fun feeding (){
         petPic.clearAnimation()
@@ -47,33 +31,21 @@ class PetCareActivity : AppCompatActivity(), BalanceListener {
             eatAnimation = background as AnimationDrawable
             eatAnimation.start()
         }
-
     }
 
-    fun watering() {
-//        waterDrop.isVisible = true
-//        waterDrop.translationY = dropInitialY
-//
-//        val dropRate = dropInitialY * 2f / (0.1f * 60f) / 100f
-//        waterTimer = timer(period = 2) {
-//            runOnUiThread {
-//                waterDrop.translationY += dropRate
-//            }
-//
-//        }
-//        waterDrop.isVisible = false
-
+    private fun watering() {
         // Show drop
-        Handler(mainLooper).postDelayed(
-            { waterDrop.setImageResource(R.drawable.waterdrop_sprite) },
-            1
-        )
-
-        //Then make it transparent after 1 second
-        Handler(mainLooper).postDelayed(
-            { waterDrop.setImageResource(android.R.color.transparent) },
-            1000
-        )
+        //      Note: For some reason, the code below causes the app to crash
+//        Handler(mainLooper).postDelayed(
+//            { waterDrop.setImageResource(R.drawable.waterdrop_sprite) },
+//            1
+//        )
+//
+//        //Then make it transparent after 1 second
+//        Handler(mainLooper).postDelayed(
+//            { waterDrop.setImageResource(android.R.color.transparent) },
+//            1000
+//        )
     }
 
     private fun dancing (){
@@ -87,20 +59,29 @@ class PetCareActivity : AppCompatActivity(), BalanceListener {
     private fun updateHeart(){
         if(happiness >= 95){
             heartPic.setImageResource(R.drawable.heart2)
-        } else if(happiness in 85..94){
+        } else if(happiness in 81..94){
             heartPic.setImageResource(R.drawable.heart_90)
-        } else if(happiness in 75..84){
+        } else if(happiness in 67..79){
             heartPic.setImageResource(R.drawable.heart_80)
-        } else if(happiness in 65..74){
+        } else if(happiness in 54..66){
             heartPic.setImageResource(R.drawable.heart_65)
-        } else if(happiness in 45..64){
+        } else if(happiness in 41..53){
             heartPic.setImageResource(R.drawable.heart_45)
-        } else if(happiness in 25..44){
+        } else if(happiness in 28..40){
             heartPic.setImageResource(R.drawable.heart_25)
-        } else if(happiness in 10..43){
+        } else if(happiness in 14..27){
             heartPic.setImageResource(R.drawable.heart_10)
         } else {
             heartPic.setImageResource(R.drawable.heart_0)
+        }
+    }
+
+    private fun updateBalance(newBalance: Int) {
+        balance = newBalance
+        moneyStepsFragment.updateValues()
+        with(sf.edit()) {
+            putInt("balance", balance)
+            apply()
         }
     }
 
@@ -110,12 +91,18 @@ class PetCareActivity : AppCompatActivity(), BalanceListener {
 
         PETCARE_ACTIVITY = this
 
-        waterDrop = findViewById(R.id.drop)
-        dropInitialY = waterDrop.translationY
-        dropFinalY = dropInitialY * -1f
+        moneyStepsFragment = MoneyStepsFragment()
+        supportFragmentManager.beginTransaction().apply {
+            add(R.id.moneyStepsFragmentContainerView, moneyStepsFragment, "moneySteps")
+            commit()
+        }
 
-        balanceText = findViewById(R.id.balance_text)
-        stepsText = findViewById(R.id.steps_text)
+        sf = getPreferences(Context.MODE_PRIVATE)
+        updateBalance(sf.getInt("balance", 0))
+        prevTotalSteps = sf.getFloat("prevSteps", 0f)
+
+        moneyStepsFragment.updateValues()
+
         heartPic = findViewById(R.id.heart)
         petPic = findViewById(R.id.petPic)
         dancing()
@@ -137,24 +124,26 @@ class PetCareActivity : AppCompatActivity(), BalanceListener {
         var nextAvail = hour
         var ableToWater = nextAvail - hour <= 0
 
+
         val feedButton = findViewById<Button>(R.id.Feed_button)
         feedButton.setOnClickListener{
             if(food >= 3){
                 food -= 3
 
                 if(happiness < 98){
-                    happiness += 3
+                    happiness += 5
                 }
                 feeding()
 
                 text = "Yummy food!"
-                Toast.makeText(applicationContext,text, duration).show()
+                Toast.makeText(applicationContext, text, duration).show()
                 Log.d("PETTEST", "TOAST FOOD")
+
                 updateHeart()
 
             } else {
                 text = "Not enough food :("
-                Toast.makeText(applicationContext,text, duration).show()
+                Toast.makeText(applicationContext, text, duration).show()
                 Log.d("PETTEST", "TOAST FOOD")
             }
         }
@@ -165,13 +154,14 @@ class PetCareActivity : AppCompatActivity(), BalanceListener {
             hour = cal.get(Calendar.HOUR_OF_DAY)
             if(ableToWater){
                 nextAvail += 4
-                text = "Slurp!"
                 happiness += 4
+
+                text = "Slurp!"
+                Toast.makeText(applicationContext, text, duration).show()
                 Log.d("PETTEST","Drinking!")
-                Toast.makeText(applicationContext,text, duration).show()
+
                 updateHeart()
                 watering()
-
             } else {
                 if(nextAvail > 1){
                     text = "Not thirsty.. wait $nextAvail more hours"
@@ -192,24 +182,23 @@ class PetCareActivity : AppCompatActivity(), BalanceListener {
                 text = wordsHappy[(Random.nextInt(0,10))]
                 Toast.makeText(applicationContext,text, duration).show()
                 if(happiness < 100){
-                    happiness+= 1
+                    happiness += 2
                 }
                 Log.d("PETTEST", "TOAST TALK HAPPY")
             } else if(happiness in 30..69){
                 text = wordsNeutral[(Random.nextInt(0, 10))]
                 Toast.makeText(applicationContext,text, duration).show()
                 Log.d("PETTEST", "TOAST TALK NEUTRAL")
-                happiness += 1
+                happiness += 2
             } else {
                 text = wordsUnhappy[(Random.nextInt(0, 10))]
                 Toast.makeText(applicationContext,text, duration).show()
                 Log.d("PETTEST", "TOAST TALK UNHAPPY")
-                happiness += 1
+                happiness += 2
             }
+
             dancing()
             updateHeart()
-
         }
-
     }
 }

@@ -6,35 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".ScheduleActivity">
 
-    <TextView
-        android:id="@+id/balance_text"
-        android:layout_width="0dp"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/moneyStepsFragmentContainerView"
+        android:name="com.example.classify.MoneyStepsFragment"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#8BC34A"
-        android:fontFamily="@font/press_start_2p"
-        android:paddingLeft="5sp"
-        android:paddingTop="5sp"
-        android:paddingRight="5sp"
-        android:text="$420"
-        app:layout_constraintEnd_toStartOf="@+id/steps_text"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    <TextView
-        android:id="@+id/steps_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="#8BC34A"
-        android:fontFamily="@font/press_start_2p"
-        android:paddingLeft="5sp"
-        android:paddingTop="5sp"
-        android:paddingRight="5sp"
-        android:text="0 steps"
-        android:textAlignment="textEnd"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/balance_text"
-        app:layout_constraintTop_toTopOf="@+id/balance_text" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout="@layout/fragment_money_steps" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/TodoRecyler"
@@ -44,7 +25,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/balance_text" />
+        app:layout_constraintTop_toBottomOf="@+id/moneyStepsFragmentContainerView" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/TodoDialogFrag"

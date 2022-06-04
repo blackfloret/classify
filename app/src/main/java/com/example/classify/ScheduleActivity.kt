@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.os.Bundle
 import android.util.Log
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,7 +14,7 @@ import com.example.classify.ScheduleActivity.Companion.TODO_LIST
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.time.LocalDate
 
-lateinit var SCHEDULEACTIVITY: ScheduleActivity
+lateinit var SCHEDULE_ACTIVITY: ScheduleActivity
 
 class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null, 1) {
     // If there's no database already, create one
@@ -123,13 +122,13 @@ class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null
 
 
 class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
-    private lateinit var balanceText: TextView
-    private lateinit var stepsText: TextView
+    private lateinit var moneyStepsFragment: MoneyStepsFragment
     private lateinit var database: MyDatabaseManager
     private lateinit var adapter: MyTodoListRecyclerViewAdapter
     private lateinit var recycler: RecyclerView
     private lateinit var dialfrag: EnterTodoDialogFragment
     private lateinit var fab: FloatingActionButton
+    private var prevTotalSteps = 0f
 
 
     // Create a list of todos
@@ -142,10 +141,19 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_schedule)
 
-        SCHEDULEACTIVITY = this
+        SCHEDULE_ACTIVITY = this
 
-        balanceText = findViewById(R.id.balance_text)
-        stepsText = findViewById(R.id.steps_text)
+        moneyStepsFragment = MoneyStepsFragment()
+        supportFragmentManager.beginTransaction().apply {
+            add(R.id.moneyStepsFragmentContainerView, moneyStepsFragment, "moneySteps")
+            commit()
+        }
+
+        sf = getPreferences(Context.MODE_PRIVATE)
+        updateBalance(sf.getInt("balance", 0))
+        prevTotalSteps = sf.getFloat("prevSteps", 0f)
+
+        moneyStepsFragment.updateValues()
 
         database = MyDatabaseManager(this)
         val allRows = database.readAllRows()
@@ -178,11 +186,21 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
         }
     }
 
+    private fun updateBalance(newBalance: Int) {
+        balance = newBalance
+        moneyStepsFragment.updateValues()
+        with(sf.edit()) {
+            putInt("balance", balance)
+            apply()
+        }
+    }
+
     override fun onTodoClick(position: Int) {
         // The onClick implementation of the RecyclerView item click
     }
 
-    override fun onTodoRemove(priority: Int) {
+    override fun onTodoRemove(value: Int, priority: Int) {
+        updateBalance(balance+value)
         for (todo in TODO_LIST) {
             if (todo.priority == priority){
                 TODO_LIST.remove(todo)

@@ -16,11 +16,7 @@ import java.time.format.DateTimeFormatter
 // Define a listener interface for this fragment
 interface TodoListener {
     fun onTodoClick(position: Int)
-    fun onTodoRemove(priority: Int)
-}
-
-interface BalanceListener {
-    fun onAddBalance(value: Int)
+    fun onTodoRemove(value: Int, priority: Int)
 }
 
 /**
@@ -32,9 +28,6 @@ class MyTodoListRecyclerViewAdapter(
 ) : RecyclerView.Adapter<MyTodoListRecyclerViewAdapter.ViewHolder>() {
 
     var todoListener: TodoListener? = null
-    var balanceListenerMain: BalanceListener? = null
-    var balanceListenerPetCare: BalanceListener? = null
-    var balanceListenerSchedule: BalanceListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -53,12 +46,7 @@ class MyTodoListRecyclerViewAdapter(
 
         // Remove the todoItem from RecyclerView AND database
         holder.xButton.setOnClickListener {
-            balanceListenerMain?.onAddBalance(value)
-            balanceListenerPetCare?.onAddBalance(value)
-            balanceListenerSchedule?.onAddBalance(value)
-            Log.d("recycler todo", "value of removed item = $value")
-
-            todoListener?.onTodoRemove(item.priority)
+            todoListener?.onTodoRemove(value, item.priority)
             Log.d("recycler todo", "priority of removed item = ${item.priority}")
 
             removeItem(position)
