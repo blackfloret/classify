@@ -49,8 +49,8 @@ class MyTodoListRecyclerViewAdapter(
             todoListener?.onTodoRemove(value, item.priority)
             Log.d("recycler todo", "priority of removed item = ${item.priority}")
 
-            removeItem(position)
-            Log.d("recycler todo", "removed view holder")
+//            removeItem(position)
+//            Log.d("recycler todo", "removed view holder")
         }
 
         // Calculate the value of the TodoItem

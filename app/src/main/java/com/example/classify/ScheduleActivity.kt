@@ -216,8 +216,10 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
         printList()
 
         runOnUiThread {
-            // Then tell adapter that data has changed
+            // Then tell adapter that data has
             adapter.notifyDataSetChanged()
+            Log.d("TODO_LIST", "del todo, thus update recycler view")
+            printList()
         }
     }
 
@@ -298,6 +300,7 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
     // Add all TodoData to database whenever we switch off Schedule Activity or the app
     //      Note: This is the only time we add TodoData to the database
     override fun onStop() {
+        database.clearDatabase()
         database.insertAll()
         Log.d("schedule activity", "ON STOP()")
         printList()
