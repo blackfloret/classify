@@ -31,7 +31,6 @@ lateinit var MAINACTIVITY: MainActivity
 lateinit var sf: SharedPreferences
 var balance = 0
 var steps = 0
-var food = 6
 var happiness = 0
 
 class MainActivity : AppCompatActivity(), SensorEventListener {

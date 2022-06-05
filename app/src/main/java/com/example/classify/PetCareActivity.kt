@@ -127,8 +127,9 @@ class PetCareActivity : AppCompatActivity() {
 
         val feedButton = findViewById<Button>(R.id.Feed_button)
         feedButton.setOnClickListener{
-            if(food >= 3){
-                food -= 3
+            if(balance >= 5){
+                balance -= 5
+                updateBalance(balance)
 
                 if(happiness < 98){
                     happiness += 5

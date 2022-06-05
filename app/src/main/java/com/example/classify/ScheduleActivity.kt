@@ -38,25 +38,9 @@ class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { }
 
-    fun onDatabaseUpdate(priority: Int) {
-        val db = this.writableDatabase
-        db.execSQL("UPDATE TODOS SET PRIORITY = PRIORITY + 1 WHERE PRIORITY >= $priority ")
-        db.close()
-        Log.d("database", "todo priorities updated")
-    }
-
-    // Delete TodoData info from the database using priority since it's the unique primary key
-    fun onDelete(priority: Int) {
-        val db = this.writableDatabase
-        db.delete("TODOS", "PRIORITY" + "=" + priority, null)
-        db.close()
-        Log.d("schedule activity", "todo deleted with priority: $priority")
-    }
-
     // Insert SINGLE TodoData into the database
     private fun insert(todo: ToDoData) {
         // onCreate() returns a ref to writableDatabase
-        // We need to translate this: INSERT INTO CHUCK VALUES("foobar")
         val db = this.writableDatabase
 
         val values = ContentValues()
@@ -114,6 +98,7 @@ class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null
             Log.d("database", "TODOS table length: $count")
         }
         Log.d("database", "TODO_LIST length: ${result.size}")
+
         c.close()
         db.close()
         return result
@@ -163,9 +148,6 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
 
         adapter = MyTodoListRecyclerViewAdapter(TODO_LIST)
         adapter.todoListener = this
-//        adapter.balanceListenerSchedule = this
-//        adapter.balanceListenerMain = MAINACTIVITY
-//        adapter.balanceListenerPetCare = PETCARE_ACTIVITY
 
         recycler = findViewById(R.id.TodoRecyler)
         recycler.adapter = adapter
@@ -186,7 +168,18 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
         }
     }
 
+    // Preserve original values of balance and steps on changing activities
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        with(sf.edit()) {
+            putInt("balance", balance)
+            putFloat("prevSteps", prevTotalSteps)
+            apply()
+        }
+    }
+
     private fun updateBalance(newBalance: Int) {
+        Log.d("schedule activity", "new balance: $newBalance")
         balance = newBalance
         moneyStepsFragment.updateValues()
         with(sf.edit()) {
@@ -201,6 +194,7 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
 
     override fun onTodoRemove(value: Int, priority: Int) {
         updateBalance(balance+value)
+
         for (todo in TODO_LIST) {
             if (todo.priority == priority){
                 TODO_LIST.remove(todo)
@@ -208,7 +202,7 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
         }
 
         if (TODO_LIST.size >= 2) {
-            updatePrioritiesOnDelete(priority)
+            updatePrioritiesOnRemove(priority)
             insertionSort()
         }
 
@@ -232,7 +226,7 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
         priority: Int
     ) {
         val newData = ToDoData(localDate, hour, minute, name, comment, priority)
-        updatePrioritiesOnInsert(newData.priority)
+        updatePrioritiesOnEnter(newData.priority)
         TODO_LIST.add(newData)
         Log.d("TODO_LIST", "before insertionSort()")
         printList()
@@ -250,7 +244,8 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
         }
     }
 
-    private fun updatePrioritiesOnDelete(priority: Int) {
+    // Helper function for onTodoRemove()
+    private fun updatePrioritiesOnRemove(priority: Int) {
         for (todo in TODO_LIST) {
             if (todo.priority >= priority) {
                 todo.priority -= 1
@@ -260,7 +255,8 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
         printList()
     }
 
-    private fun updatePrioritiesOnInsert(priority: Int) {
+    // Helper function for onTodoEntered()
+    private fun updatePrioritiesOnEnter(priority: Int) {
         for (todo in TODO_LIST) {
             if (todo.priority >= priority) {
                 todo.priority += 1
