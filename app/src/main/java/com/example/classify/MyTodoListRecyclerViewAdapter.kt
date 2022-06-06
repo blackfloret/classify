@@ -56,7 +56,6 @@ class MyTodoListRecyclerViewAdapter(
         // Calculate the value of the TodoItem
         val today: LocalDate = LocalDate.now()
         var period = Period.between(today, item.date)
-        Log.d("recycler todo", "period of days = ${period.days}")
 
         if (period.days <= 1) {
             holder.moneyView.text = "+1"

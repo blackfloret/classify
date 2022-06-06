@@ -1,6 +1,7 @@
 package com.example.classify
 
 import android.util.Log
+import com.example.classify.ScheduleActivity.Companion.TODO_LIST
 import com.nhaarman.mockito_kotlin.given
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.spy
@@ -24,7 +25,7 @@ class ExampleUnitTest {
     @Before
     fun setup() {
         scheduleActivity = mock()
-        list = scheduleActivity.TODO_LIST
+        list = TODO_LIST
 
 
         whenever(scheduleActivity.onTodoEntered(localDate, hour, minute, name, comment, priority))

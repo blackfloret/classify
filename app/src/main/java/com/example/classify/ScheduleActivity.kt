@@ -2,7 +2,6 @@ package com.example.classify
 
 import android.content.ContentValues
 import android.content.Context
-import android.content.res.Configuration
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.os.Bundle
@@ -12,7 +11,6 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import org.jetbrains.annotations.NotNull
 import java.time.LocalDate
 
 lateinit var SCHEDULE_ACTIVITY: ScheduleActivity
@@ -30,7 +28,9 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
 
     // Create a list of todos
     // remember that companion objects create static class variables
-    var TODO_LIST = arrayListOf<ToDoData>()
+    companion object {
+        var TODO_LIST = arrayListOf<ToDoData>()
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +69,14 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
             Log.d("schedule activity", "fab clicked!")
 
             dialfrag = EnterTodoDialogFragment.newInstance(this, TODO_LIST.size)
-            dialfrag.show(supportFragmentManager, "inflate dial frag")
+            dialfrag.show(supportFragmentManager, "inflated enter todo frag")
+//            supportFragmentManager.beginTransaction().apply {
+//                fabIsVisible = false
+//                fab.isVisible = false
+//                replace(R.id.TodoDialogFrag, dialfrag, "enter todo dialog frag")
+//                commit()
+//                Log.d("schedule activity", "inflated enter todo dialog")
+//            }
         }
 
         savedInstanceState?.let {
@@ -95,8 +102,7 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
     }
 
     private fun updateBalance(newBalance: Int) {
-        Log.d("schedule activity", "new balance: $newBalance")
-        MAINACTIVITY.updateBalance(newBalance)
+        balance = newBalance
         moneyStepsFragment.updateValues()
         with(sf.edit()) {
             putInt("balance", balance)
@@ -110,7 +116,6 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
 
     override fun onTodoRemove(value: Int, priority: Int) {
         updateBalance(balance+value)
-
         for (todo in TODO_LIST) {
             if (todo.priority == priority){
                 TODO_LIST.remove(todo)
@@ -118,7 +123,7 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
         }
 
         if (TODO_LIST.size >= 2) {
-            updatePrioritiesOnRemove(priority)
+            updatePrioritiesOnDelete(priority)
             insertionSort()
         }
 
@@ -141,10 +146,8 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
         comment: String,
         priority: Int
     ) {
-        supportFragmentManager.beginTransaction().remove(dialfrag).commit()
-
         val newData = ToDoData(localDate, hour, minute, name, comment, priority)
-        updatePrioritiesOnEnter(newData.priority)
+        updatePrioritiesOnInsert(newData.priority)
         TODO_LIST.add(newData)
         Log.d("TODO_LIST", "before insertionSort()")
         printList()
@@ -153,8 +156,8 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
         Log.d("TODO_LIST", "after insertionSort()")
         printList()
 
-        fabIsVisible = true
         fab.isVisible = true
+        supportFragmentManager.beginTransaction().remove(dialfrag).commit()
 
         runOnUiThread {
             // Then tell adapter that data has changed
@@ -162,8 +165,7 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
         }
     }
 
-    // Helper function for onTodoRemove()
-    private fun updatePrioritiesOnRemove(priority: Int) {
+    private fun updatePrioritiesOnDelete(priority: Int) {
         for (todo in TODO_LIST) {
             if (todo.priority >= priority) {
                 todo.priority -= 1
@@ -173,8 +175,7 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
         printList()
     }
 
-    // Helper function for onTodoEntered()
-    private fun updatePrioritiesOnEnter(priority: Int) {
+    private fun updatePrioritiesOnInsert(priority: Int) {
         for (todo in TODO_LIST) {
             if (todo.priority >= priority) {
                 todo.priority += 1
@@ -195,17 +196,13 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
             while ((i > 0) && (curPriority < TODO_LIST[i - 1].priority)){
                 TODO_LIST[i] = TODO_LIST[i - 1]
                 i -= 1
-                Log.d("TODO_LIST", "insertionSort() iteration count: $count, i: $i")
-                printList()
             }
             TODO_LIST[i] = cur
-            Log.d("TODO_LIST", "insertionSort() fin")
-            printList()
         }
     }
 
     // Log TODO_LIST contents
-    fun printList() {
+    private fun printList() {
         for (count in 0..TODO_LIST.size-1) {
             Log.d("TODO_LIST contents", "Index $count: ${TODO_LIST[count].toString()}")
         }

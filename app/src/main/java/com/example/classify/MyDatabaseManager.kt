@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
+import com.example.classify.ScheduleActivity.Companion.TODO_LIST
 import java.time.LocalDate
 
 class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null, 1) {
@@ -51,7 +52,7 @@ class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null
     // Insert ALL TodoData into the database
     fun insertAll() {
         val db = this.writableDatabase
-        for (todo in ScheduleActivity().TODO_LIST) {
+        for (todo in TODO_LIST) {
             insert(todo)
         }
 
