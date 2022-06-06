@@ -109,6 +109,7 @@ class EnterTodoDialogFragment : Fragment() {
         // Button - Finalize task
         val okButton = view.findViewById<Button>(R.id.button)
         okButton.setOnClickListener {
+            Log.d("dialog frag", "ok button clickced in dialog frag")
             listener?.onTodoEntered(localDate, hour, minute, name, comment, priority)
 
             // Reset values

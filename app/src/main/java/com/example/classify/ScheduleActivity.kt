@@ -149,6 +149,8 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
         comment: String,
         priority: Int
     ) {
+        supportFragmentManager.beginTransaction().remove(dialfrag).commit()
+
         val newData = ToDoData(localDate, hour, minute, name, comment, priority)
         updatePrioritiesOnEnter(newData.priority)
         TODO_LIST.add(newData)
@@ -161,7 +163,6 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
 
         fabIsVisible = true
         fab.isVisible = true
-        supportFragmentManager.beginTransaction().remove(dialfrag).commit()
 
         runOnUiThread {
             // Then tell adapter that data has changed
