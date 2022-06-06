@@ -19,6 +19,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import android.hardware.SensorManager
+import android.icu.util.Calendar
 import android.os.Build
 import android.util.Log
 import android.view.Menu
@@ -28,15 +29,19 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 
 lateinit var MAINACTIVITY: MainActivity
+lateinit var sf: SharedPreferences
 var balance = 0
+var steps = 0
+var happiness = 0
+
 class MainActivity : AppCompatActivity(), SensorEventListener {
-    lateinit var balanceText: TextView
-    lateinit var stepsText: TextView
-    lateinit var sf: SharedPreferences
+    lateinit var dialFrag: AboutFragment
     private var sensorManager: SensorManager? = null
     private var running = false
     private var totalSteps = 0f
     private var prevTotalSteps = 0f
+    lateinit var moneyStepsFragment: MoneyStepsFragment
+    val happinessLossRate = 10
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,14 +50,32 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         MAINACTIVITY = this
 
         sf = getPreferences(Context.MODE_PRIVATE)
-        balanceText = findViewById(R.id.balance_text)
-        stepsText = findViewById(R.id.steps_text)
         val petCareButton: ImageView = findViewById(R.id.petCareButton)
         val meditationButton: ImageView = findViewById(R.id.meditateButton)
         val scheduleButton: ImageView = findViewById(R.id.scheduleButton)
 
+        moneyStepsFragment = MoneyStepsFragment()
+        supportFragmentManager.beginTransaction().apply {
+            add(R.id.moneyStepsFragmentContainerView, moneyStepsFragment, "moneySteps")
+            commit()
+        }
+
+        val prevTime = sf.getLong("time", 0L)
+        val curTime = Calendar.getInstance().timeInMillis
+        with(sf.edit()) {
+            putLong("time", curTime)
+        }
+
+        val timeElapsed = curTime - prevTime
+        val hoursElapsed = timeElapsed/3600000L
+        val lostHappiness = hoursElapsed * happinessLossRate
+        happiness = Math.max(0, happiness - lostHappiness).toInt()
+        happiness  = sf.getInt("happiness",0)
         updateBalance(sf.getInt("balance", 0))
         prevTotalSteps = sf.getFloat("prevSteps", 0f)
+
+        moneyStepsFragment.updateValues()
+
 
         if(ActivityCompat.checkSelfPermission(this, ACTIVITY_RECOGNITION) != PERMISSION_GRANTED) {
             requestPermissions(arrayOf(ACTIVITY_RECOGNITION), 1)
@@ -80,18 +103,17 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         }
     }
 
-    fun updateBalance(newBalance: Int) {
-        balance = newBalance
-        val newBalText = "\$$balance"
-        balanceText.text = newBalText
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
         with(sf.edit()) {
             putInt("balance", balance)
             apply()
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
+    fun updateBalance(newBalance: Int) {
+        balance = newBalance
+        moneyStepsFragment.updateValues()
         with(sf.edit()) {
             putInt("balance", balance)
             apply()
@@ -102,9 +124,9 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         if(running) {
             totalSteps = event!!.values[0]
             Log.d("dirk", "$totalSteps")
-            val currentSteps = totalSteps.toInt() - prevTotalSteps.toInt()
-            //updateBalance()
-            stepsText.text = ("$currentSteps steps")
+            steps = totalSteps.toInt() - prevTotalSteps.toInt()
+            // updateBalance()
+            moneyStepsFragment.updateValues()
         }
     }
 
@@ -136,7 +158,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         val remSteps = (totalSteps.toInt() - prevTotalSteps.toInt()) % 100
         updateBalance(balance + cashedSteps)
         prevTotalSteps = totalSteps - remSteps
-        stepsText.text = "$remSteps steps"
+        moneyStepsFragment.updateValues()
 
         with(sf.edit()) {
             putFloat("prevSteps", prevTotalSteps)
@@ -165,7 +187,10 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     }
 
     fun displayAbout() {
-
+            Log.d("main activity", "about option clicked")
+            dialFrag = AboutFragment.newInstance("hi", "bye")
+            dialFrag.show(supportFragmentManager, "Showing 'About' page")
+           // dialFrag.listener = this
     }
 
 }

@@ -15,6 +15,12 @@
     <string name="_1">1</string>
     <string name="how_many_minutes_would_you_like_to_meditate">How many minutes would you like to meditate?</string>
     <string name="_5">5</string>
+    <string name="version">Version 1.0.1</string>
+    <string name="about_us">\t\t\tHello, we\'re a small team from Western Washington University who made
+        this app as our final project for CSCI412 - Android App Development. Our team members are
+        Derrick, Bec, and Di. Bec and Di are graduating Spring 2022 and Derrick is graduating
+        Fall 2022. \n\t\t\tOur shared love of games and a need for an organizing app made this app
+        come to fruition. We hope you enjoy it!</string>
     <string-array name="lone_priority_array">
         <item>1</item>
     </string-array>

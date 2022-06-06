@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".EnterTodoDialogFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,6 +18,7 @@
             android:layout_marginTop="16dp"
             android:fontFamily="@font/press_start_2p"
             android:text="Enter ToDo"
+            android:textSize="18dp"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -29,41 +31,52 @@
             android:layout_height="300dp"
             app:layout_constraintBottom_toTopOf="@+id/number_picker"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.504"
+            app:layout_constraintHorizontal_bias="0.516"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/date_header"
-            app:layout_constraintVertical_bias="0.125" />
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/time_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="30dp"
             android:gravity="center"
             android:text="Time:"
             android:textColor="@color/black"
             app:layout_constraintBottom_toTopOf="@+id/number_picker"
             app:layout_constraintEnd_toStartOf="@+id/priority_text"
-            app:layout_constraintHorizontal_bias="0.593"
+            app:layout_constraintHorizontal_bias="0.592"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/calendarView" />
+            app:layout_constraintTop_toBottomOf="@+id/calendarView"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TimePicker
             android:id="@+id/timeView"
             android:layout_width="257dp"
             android:layout_height="153dp"
-            android:layout_marginStart="48dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
             android:timePickerMode="spinner"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/time_text" />
+
+        <NumberPicker
+            android:id="@+id/number_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.364"
+            app:layout_constraintStart_toEndOf="@+id/timeView"
+            app:layout_constraintTop_toBottomOf="@+id/priority_text" />
 
         <TextView
             android:id="@+id/priority_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:layout_marginEnd="36dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="16dp"
             android:gravity="center"
             android:text="Priority:"
             android:textColor="@color/black"
@@ -73,22 +86,12 @@
             app:layout_constraintVertical_bias="0.0"
             app:layout_constraintVertical_chainStyle="spread_inside" />
 
-        <NumberPicker
-            android:id="@+id/number_picker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="48dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.63"
-            app:layout_constraintStart_toEndOf="@+id/timeView"
-            app:layout_constraintTop_toBottomOf="@+id/priority_text" />
-
         <TextView
             android:id="@+id/name_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="52dp"
+            android:layout_marginTop="40dp"
             android:fontFamily="@font/press_start_2p"
             android:gravity="center"
             android:text="Name:    "
@@ -96,24 +99,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/timeView" />
 
-        <EditText
-            android:id="@+id/name_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:textSize="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/name_header"
-            app:layout_constraintTop_toBottomOf="@+id/number_picker" />
-
         <TextView
             android:id="@+id/comment_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:fontFamily="@font/press_start_2p"
             android:gravity="center"
             android:text="Comment: "
@@ -136,26 +127,45 @@
             android:id="@+id/comment_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-1dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:textSize="16dp"
+            android:inputType="text"
+            android:textSize="12sp"
+            android:maxLines="1"
+            android:hint="Enter name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/comment_header"
             app:layout_constraintTop_toBottomOf="@+id/name_text" />
 
+        <EditText
+            android:id="@+id/name_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="16dp"
+            android:inputType="text"
+            android:textSize="12sp"
+            android:maxLines="1"
+            android:hint="Enter comment"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/name_header"
+            app:layout_constraintTop_toBottomOf="@+id/number_picker" />
+
         <Button
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="12dp"
             android:fontFamily="@font/press_start_2p"
             android:text="OK"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.473"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/comment_text" />
+            app:layout_constraintTop_toBottomOf="@+id/comment_text"
+            app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

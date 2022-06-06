@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -13,14 +14,15 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [OptionsFragment.newInstance] factory method to
+ * Use the [MoneyStepsFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class OptionsFragment : Fragment() {
+class MoneyStepsFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
+    var moneyText: TextView? = null
+    var stepsText: TextView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -34,7 +36,19 @@ class OptionsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_options, container, false)
+        val view = inflater.inflate(R.layout.fragment_money_steps, container, false)
+        moneyText = view.findViewById(R.id.balance_text)
+        stepsText = view.findViewById(R.id.steps_text)
+        moneyText?.text = "\$$balance"
+        stepsText?.text = "$steps steps"
+        return view
+    }
+
+    fun updateValues() {
+        val balText = "\$$balance"
+        moneyText?.text = balText
+        val stpText = "$steps steps"
+        stepsText?.text = stpText
     }
 
     companion object {
@@ -42,18 +56,12 @@ class OptionsFragment : Fragment() {
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment OptionsFragment.
+         * @return A new instance of fragment MoneyStepsFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            OptionsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        fun newInstance()  {
+            MoneyStepsFragment()
+        }
     }
 }

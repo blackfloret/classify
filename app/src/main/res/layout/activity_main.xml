@@ -7,25 +7,39 @@
     android:background="@drawable/grass_background"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/window_frame"
+        android:layout_width="340dp"
+        android:layout_height="300dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/border"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/fragmentContainerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/moneyStepsFragmentContainerView"
+        app:layout_constraintVertical_bias="0.0" />
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
         android:name="com.example.classify.PetFragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="32dp"
-        app:layout_constraintBottom_toTopOf="@+id/petCareButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/balance_text"
-        app:layout_constraintVertical_chainStyle="packed"
+        android:layout_width="192dp"
+        android:layout_height="192dp"
+        android:layout_marginBottom="-17dp"
+        app:layout_constraintBottom_toBottomOf="@id/window_frame"
+        app:layout_constraintEnd_toEndOf="@id/window_frame"
+        app:layout_constraintStart_toStartOf="@id/window_frame"
+        app:layout_constraintTop_toTopOf="@+id/window_frame"
+        app:layout_constraintVertical_bias="1.0"
         tools:layout="@layout/fragment_pet" />
 
     <ImageView
         android:id="@+id/petCareButton"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
+        android:layout_marginTop="32dp"
         android:layout_marginBottom="16dp"
         android:background="#00FFFFFF"
         android:contentDescription="@string/pet_care"
@@ -33,7 +47,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragmentContainerView"
+        app:layout_constraintTop_toBottomOf="@+id/window_frame"
         app:srcCompat="@drawable/petcare_button" />
 
     <ImageView
@@ -64,35 +78,15 @@
         app:layout_constraintTop_toBottomOf="@+id/scheduleButton"
         app:srcCompat="@drawable/meditate_button" />
 
-    <TextView
-        android:id="@+id/balance_text"
-        android:layout_width="0dp"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/moneyStepsFragmentContainerView"
+        android:name="com.example.classify.MoneyStepsFragment"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#8BC34A"
-        android:fontFamily="@font/press_start_2p"
-        android:paddingLeft="5sp"
-        android:paddingTop="5sp"
-        android:paddingRight="5sp"
-        android:text="$420"
-        app:layout_constraintEnd_toStartOf="@+id/steps_text"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/steps_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="#8BC34A"
-        android:fontFamily="@font/press_start_2p"
-        android:paddingLeft="5sp"
-        android:paddingTop="5sp"
-        android:paddingRight="5sp"
-        android:text="50 steps"
-        android:textAlignment="textEnd"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/balance_text"
-        app:layout_constraintTop_toTopOf="@+id/balance_text" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout="@layout/fragment_money_steps" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
