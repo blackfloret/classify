@@ -45,9 +45,7 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
             commit()
         }
 
-        sf = getPreferences(Context.MODE_PRIVATE)
         updateBalance(sf.getInt("balance", 0))
-        prevTotalSteps = sf.getFloat("prevSteps", 0f)
 
         moneyStepsFragment.updateValues()
 
@@ -104,7 +102,7 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
 
     private fun updateBalance(newBalance: Int) {
         Log.d("schedule activity", "new balance: $newBalance")
-        balance = newBalance
+        MAINACTIVITY.updateBalance(newBalance)
         moneyStepsFragment.updateValues()
         with(sf.edit()) {
             putInt("balance", balance)
