@@ -1,6 +1,5 @@
 package com.example.classify
 
-import android.content.Context
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.util.Log
@@ -56,12 +55,17 @@ class PetCareActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateHeart(){
+    private fun updateHappiness(newHappiness: Int) {
+        happiness = Math.min(100, newHappiness)
+        with (sf.edit()) {
+            putInt("happiness", happiness)
+            apply()
+        }
         if(happiness >= 95){
             heartPic.setImageResource(R.drawable.heart2)
         } else if(happiness in 81..94){
             heartPic.setImageResource(R.drawable.heart_90)
-        } else if(happiness in 67..79){
+        } else if(happiness in 67..80){
             heartPic.setImageResource(R.drawable.heart_80)
         } else if(happiness in 54..66){
             heartPic.setImageResource(R.drawable.heart_65)
@@ -79,6 +83,7 @@ class PetCareActivity : AppCompatActivity() {
     private fun updateBalance(newBalance: Int) {
         balance = newBalance
         moneyStepsFragment.updateValues()
+        MAINACTIVITY.updateBalance(balance)
         with(sf.edit()) {
             putInt("balance", balance)
             apply()
@@ -97,16 +102,14 @@ class PetCareActivity : AppCompatActivity() {
             commit()
         }
 
-        sf = getPreferences(Context.MODE_PRIVATE)
-        updateBalance(sf.getInt("balance", 0))
-        prevTotalSteps = sf.getFloat("prevSteps", 0f)
-
         moneyStepsFragment.updateValues()
 
         heartPic = findViewById(R.id.heart)
         petPic = findViewById(R.id.petPic)
         dancing()
-        updateHeart()
+        happiness = sf.getInt("happiness", 0)
+        Log.d("dirk", "Former happiness is $happiness")
+        updateHappiness(happiness)
 
         val wordsHappy = listOf("Happy Pride!", "Di, Derrick, and Bec deserve an A!", "Cats Rule!", "Do you like my sick moves?", "I love this app!", "wee woo wee woo",
             "Live Laugh Love yourself", "Hams my favorite food!", "I am happy!", "Good vibes!", "Having a great time!")
@@ -119,7 +122,8 @@ class PetCareActivity : AppCompatActivity() {
         val duration = Toast.LENGTH_SHORT
         var text: String
 
-        var cal = Calendar.getInstance()
+        val cal = Calendar.getInstance()
+
         var hour = cal.get(Calendar.HOUR_OF_DAY)
         var nextAvail = hour
         var ableToWater = nextAvail - hour <= 0
@@ -131,16 +135,15 @@ class PetCareActivity : AppCompatActivity() {
                 balance -= 5
                 updateBalance(balance)
 
-                if(happiness < 98){
-                    happiness += 5
-                }
+
+                updateHappiness(happiness+5)
+
                 feeding()
 
                 text = "Yummy food!"
                 Toast.makeText(applicationContext, text, duration).show()
                 Log.d("PETTEST", "TOAST FOOD")
 
-                updateHeart()
 
             } else {
                 text = "Not enough food :("
@@ -155,13 +158,12 @@ class PetCareActivity : AppCompatActivity() {
             hour = cal.get(Calendar.HOUR_OF_DAY)
             if(ableToWater){
                 nextAvail += 4
-                happiness += 4
 
                 text = "Slurp!"
                 Toast.makeText(applicationContext, text, duration).show()
                 Log.d("PETTEST","Drinking!")
 
-                updateHeart()
+                updateHappiness(happiness+4)
                 watering()
             } else {
                 if(nextAvail > 1){
@@ -182,24 +184,19 @@ class PetCareActivity : AppCompatActivity() {
             if(happiness >= 70){
                 text = wordsHappy[(Random.nextInt(0,10))]
                 Toast.makeText(applicationContext,text, duration).show()
-                if(happiness < 100){
-                    happiness += 2
-                }
                 Log.d("PETTEST", "TOAST TALK HAPPY")
             } else if(happiness in 30..69){
                 text = wordsNeutral[(Random.nextInt(0, 10))]
                 Toast.makeText(applicationContext,text, duration).show()
                 Log.d("PETTEST", "TOAST TALK NEUTRAL")
-                happiness += 2
             } else {
                 text = wordsUnhappy[(Random.nextInt(0, 10))]
                 Toast.makeText(applicationContext,text, duration).show()
                 Log.d("PETTEST", "TOAST TALK UNHAPPY")
-                happiness += 2
             }
 
+            updateHappiness(happiness+2)
             dancing()
-            updateHeart()
         }
     }
 }

@@ -19,6 +19,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import android.hardware.SensorManager
+import android.icu.util.Calendar
 import android.os.Build
 import android.util.Log
 import android.view.Menu
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private var totalSteps = 0f
     private var prevTotalSteps = 0f
     lateinit var moneyStepsFragment: MoneyStepsFragment
+    val happinessLossRate = 10
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,6 +60,17 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             commit()
         }
 
+        val prevTime = sf.getLong("time", 0L)
+        val curTime = Calendar.getInstance().timeInMillis
+        with(sf.edit()) {
+            putLong("time", curTime)
+        }
+
+        val timeElapsed = curTime - prevTime
+        val hoursElapsed = timeElapsed/3600000L
+        val lostHappiness = hoursElapsed * happinessLossRate
+        happiness = Math.max(0, happiness - lostHappiness).toInt()
+        happiness  = sf.getInt("happiness",0)
         updateBalance(sf.getInt("balance", 0))
         prevTotalSteps = sf.getFloat("prevSteps", 0f)
 
