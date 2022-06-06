@@ -31,10 +31,9 @@ lateinit var MAINACTIVITY: MainActivity
 lateinit var sf: SharedPreferences
 var balance = 0
 var steps = 0
-var food = 6
 var happiness = 0
 
-class MainActivity : AppCompatActivity(), SensorEventListener, BalanceListener {
+class MainActivity : AppCompatActivity(), SensorEventListener {
     lateinit var dialFrag: AboutFragment
     private var sensorManager: SensorManager? = null
     private var running = false
@@ -88,16 +87,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener, BalanceListener {
             Intent(this, ScheduleActivity::class.java).also {
                 startActivity(it)
             }
-        }
-    }
-
-    override fun onAddBalance(value: Int) {
-        balance += value
-        moneyStepsFragment.updateValues()
-        Log.d("todo removed", "balance = $balance")
-        with(sf.edit()) {
-            putInt("balance", balance)
-            apply()
         }
     }
 

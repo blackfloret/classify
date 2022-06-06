@@ -12,24 +12,27 @@
         android:layout_width="340dp"
         android:layout_height="300dp"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="40dp"
         android:background="@drawable/border"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/fragmentContainerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/moneyStepsFragmentContainerView" />
+        app:layout_constraintTop_toBottomOf="@+id/moneyStepsFragmentContainerView"
+        app:layout_constraintVertical_bias="0.0" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
         android:name="com.example.classify.PetFragment"
         android:layout_width="192dp"
         android:layout_height="192dp"
-        app:layout_constraintBottom_toTopOf="@+id/petCareButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
+        android:layout_marginBottom="-17dp"
+        app:layout_constraintBottom_toBottomOf="@id/window_frame"
+        app:layout_constraintEnd_toEndOf="@id/window_frame"
+        app:layout_constraintStart_toStartOf="@id/window_frame"
+        app:layout_constraintTop_toTopOf="@+id/window_frame"
+        app:layout_constraintVertical_bias="1.0"
         tools:layout="@layout/fragment_pet" />
 
     <ImageView
