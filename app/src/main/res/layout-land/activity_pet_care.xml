@@ -11,16 +11,14 @@
         android:id="@+id/imageView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="2dp"
-        android:rotation="-90"
         android:scaleType="centerCrop"
-        android:src="@drawable/gameboy_blank_trimmed"
+        android:src="@drawable/gameboy_blank_trimmed_land"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/moneyStepsFragmentContainerView"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/moneyStepsFragmentContainerView"
@@ -36,17 +34,20 @@
     <TextView
         android:id="@+id/window_frame"
         android:layout_width="340dp"
-        android:layout_height="300dp"
+        android:layout_height="250dp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="40dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/border"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.135"
+        app:layout_constraintEnd_toStartOf="@id/water_button"
+        app:layout_constraintHorizontal_bias="0.169"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/moneyStepsFragmentContainerView"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/moneyStepsFragmentContainerView"
+        app:layout_constraintVertical_bias="0.01" />
 
     <ImageView
         android:id="@+id/petPic"
@@ -73,41 +74,40 @@
 
     <Button
         android:id="@+id/Feed_button"
-        android:layout_width="250dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/android_grey"
         android:text="Feed"
         app:layout_constraintBottom_toTopOf="@+id/water_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.966"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.363"
+        app:layout_constraintStart_toEndOf="@id/window_frame"
         app:layout_constraintTop_toBottomOf="@id/moneyStepsFragmentContainerView"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <Button
         android:id="@+id/water_button"
-        android:layout_width="250dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
+        android:layout_marginEnd="132dp"
         android:backgroundTint="@color/android_grey"
         android:text="WATER"
         app:layout_constraintBottom_toTopOf="@+id/talk_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.966"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Feed_button" />
 
     <Button
         android:id="@+id/talk_button"
-        android:layout_width="250dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:backgroundTint="@color/android_grey"
         android:text="TALK"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.966"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.363"
+        app:layout_constraintStart_toEndOf="@id/window_frame"
         app:layout_constraintTop_toBottomOf="@+id/water_button"
         app:layout_constraintVertical_bias="0.0" />
 

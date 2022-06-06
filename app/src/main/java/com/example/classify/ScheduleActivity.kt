@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.classify.ScheduleActivity.Companion.TODO_LIST
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.time.LocalDate
 
@@ -29,9 +28,8 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
 
     // Create a list of todos
     // remember that companion objects create static class variables
-    companion object {
-        var TODO_LIST = arrayListOf<ToDoData>()
-    }
+    var TODO_LIST = arrayListOf<ToDoData>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

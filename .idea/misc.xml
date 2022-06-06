@@ -3,6 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+<<<<<<< HEAD
+        <entry key="..\:/Users/Peter Tiberious Beck/classify/app/src/main/res/layout-land/activity_main.xml" value="0.21614583333333334" />
+        <entry key="..\:/Users/Peter Tiberious Beck/classify/app/src/main/res/layout-land/activity_pet_care.xml" value="0.31040564373897706" />
+        <entry key="..\:/Users/Peter Tiberious Beck/classify/app/src/main/res/layout-land/activity_schedule.xml" value="0.31040564373897706" />
+        <entry key="..\:/Users/Peter Tiberious Beck/classify/app/src/main/res/layout-land/fragment_enter_todo_dialog.xml" value="0.25364583333333335" />
+        <entry key="..\:/Users/Peter Tiberious Beck/classify/app/src/main/res/layout/activity_main.xml" value="0.17831813576494426" />
+        <entry key="..\:/Users/Peter Tiberious Beck/classify/app/src/main/res/layout/activity_pet_care.xml" value="0.28125" />
+        <entry key="..\:/Users/Peter Tiberious Beck/classify/app/src/main/res/layout/activity_schedule.xml" value="0.1802536231884058" />
+=======
+>>>>>>> main
         <entry key="..\:/Users/black/MyDrive/cs412_mobileDevelopment/classify/app/src/main/res/layout/activity_main.xml" value="0.10960144927536232" />
         <entry key="..\:/Users/black/MyDrive/cs412_mobileDevelopment/classify/app/src/main/res/layout/activity_meditation.xml" value="0.33" />
         <entry key="..\:/Users/black/MyDrive/cs412_mobileDevelopment/classify/app/src/main/res/layout/activity_schedule.xml" value="0.36666666666666664" />
