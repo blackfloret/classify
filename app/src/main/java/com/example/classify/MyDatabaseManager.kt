@@ -51,7 +51,7 @@ class MyDatabaseManager(context: Context): SQLiteOpenHelper(context, "MyDB",null
     // Insert ALL TodoData into the database
     fun insertAll() {
         val db = this.writableDatabase
-        for (todo in ScheduleActivity.TODO_LIST) {
+        for (todo in ScheduleActivity().TODO_LIST) {
             insert(todo)
         }
 

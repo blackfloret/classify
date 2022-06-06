@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.classify.ScheduleActivity.Companion.TODO_LIST
 
 /**
  * A fragment representing a list of Items.
@@ -39,7 +38,7 @@ class TodoListFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = MyTodoListRecyclerViewAdapter(TODO_LIST)
+                adapter = MyTodoListRecyclerViewAdapter(ScheduleActivity().TODO_LIST)
             }
         }
         return view
