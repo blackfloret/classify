@@ -72,11 +72,14 @@ class MeditationActivity : AppCompatActivity(), MeditationListener {
         sunInitialY = sun.translationY
         sunFinalY = sunInitialY * -1f
         skyBackground = findViewById(R.id.sky_background)
-        val dialogueFragment: MeditationDialogueFragment = MeditationDialogueFragment.newInstance(this)
-        supportFragmentManager.beginTransaction().apply {
-            add(R.id.meditationPageFragment, dialogueFragment, "meditationDialogue")
-            commit()
+        if(true) {
+            val dialogueFragment: MeditationDialogueFragment = MeditationDialogueFragment.newInstance(this)
+            supportFragmentManager.beginTransaction().apply {
+                replace(R.id.meditationPageFragment, dialogueFragment, "meditationDialogue")
+                commit()
+            }
         }
+
 
     }
 

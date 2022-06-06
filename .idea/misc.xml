@@ -3,14 +3,6 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/Peter Tiberious Beck/classify/app/src/main/res/drawable/border.xml" value="0.218" />
-        <entry key="..\:/Users/Peter Tiberious Beck/classify/app/src/main/res/layout/activity_meditation.xml" value="0.2128623188405797" />
-        <entry key="..\:/Users/Peter Tiberious Beck/classify/app/src/main/res/layout/fragment_enter_todo_dialog.xml" value="0.2128623188405797" />
-        <entry key="..\:/Users/Peter Tiberious Beck/classify/app/src/main/res/layout/fragment_meditation.xml" value="0.2128623188405797" />
-        <entry key="..\:/Users/Peter Tiberious Beck/classify/app/src/main/res/layout/fragment_meditation_dialogue.xml" value="0.2128623188405797" />
-        <entry key="..\:/Users/Peter Tiberious Beck/classify/app/src/main/res/layout/fragment_options.xml" value="0.2128623188405797" />
-        <entry key="..\:/Users/Peter Tiberious Beck/classify/app/src/main/res/layout/todo_item.xml" value="0.67" />
-        <entry key="..\:/Users/Peter Tiberious Beck/classify/app/src/main/res/menu/main_menu.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/black/MyDrive/cs412_mobileDevelopment/classify/app/src/main/res/layout/activity_main.xml" value="0.10960144927536232" />
         <entry key="..\:/Users/black/MyDrive/cs412_mobileDevelopment/classify/app/src/main/res/layout/activity_meditation.xml" value="0.33" />
         <entry key="..\:/Users/black/MyDrive/cs412_mobileDevelopment/classify/app/src/main/res/layout/activity_schedule.xml" value="0.36666666666666664" />
@@ -18,11 +10,14 @@
         <entry key="..\:/Users/black/MyDrive/cs412_mobileDevelopment/classify/app/src/main/res/layout/fragment_meditation_dialogue.xml" value="0.34103260869565216" />
         <entry key="..\:/Users/black/MyDrive/cs412_mobileDevelopment/classify/app/src/main/res/layout/fragment_options.xml" value="0.10960144927536232" />
         <entry key="..\:/Users/black/StudioProjects/classify/app/src/main/res/layout/activity_main.xml" value="0.33" />
-        <entry key="..\:/Users/black/StudioProjects/classify/app/src/main/res/layout/activity_meditation.xml" value="0.17708333333333334" />
         <entry key="..\:/Users/black/StudioProjects/classify/app/src/main/res/layout/fragment_meditatio_dialogue.xml" value="0.3605072463768116" />
-        <entry key="..\:/Users/black/StudioProjects/classify/app/src/main/res/layout/fragment_meditation.xml" value="0.17708333333333334" />
-        <entry key="..\:/Users/black/StudioProjects/classify/app/src/main/res/layout/fragment_meditation_dialogue.xml" value="0.17708333333333334" />
         <entry key="..\:/Users/black/StudioProjects/classify/app/src/main/res/layout/fragment_pet.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/black/classify/app/src/main/res/layout-land/activity_meditation.xml" value="0.12" />
+        <entry key="..\:/Users/black/classify/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Users/black/classify/app/src/main/res/layout/activity_meditation.xml" value="0.16394927536231885" />
+        <entry key="..\:/Users/black/classify/app/src/main/res/layout/activity_pet_care.xml" value="0.22" />
+        <entry key="..\:/Users/black/classify/app/src/main/res/layout/fragment_meditation_dialogue.xml" value="0.16394927536231885" />
+        <entry key="..\:/Users/black/classify/app/src/main/res/menu/main_menu.xml" value="0.22" />
       </map>
     </option>
   </component>
