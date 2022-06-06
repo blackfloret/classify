@@ -16,16 +16,11 @@ import java.util.*
 class ExampleUnitTest {
     @Test
     fun todoAdded() {
-        Whitebox.setInternalState(ScheduleActivity.class, TODO_LIST)
         TODO_LIST = arrayListOf<ToDoData>()
 
         ScheduleActivity().onTodoEntered(LocalDate.of(2010, 12, 30), 1, 1,"", "", 1)
         ScheduleActivity().onTodoEntered(LocalDate.of(2020, 12, 30), 2, 2,"", "", 2)
         ScheduleActivity().onTodoEntered(LocalDate.of(2030, 12, 30), 3, 3,"", "", 3)
-
-        for (todo in TODO_LIST) {
-            System.out.println("unit test: " + todo.toString())
-        }
 
         assertEquals(ToDoData(LocalDate.of(2010, 12, 30), 1, 1,"", "", 1),
             TODO_LIST[0]
