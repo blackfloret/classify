@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import java.time.LocalDate
 import java.util.*
@@ -38,7 +39,7 @@ interface EnterTodoListener {
  * Use the [EnterTodoDialogFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class EnterTodoDialogFragment : Fragment() {
+class EnterTodoDialogFragment : DialogFragment() {
     var listener: EnterTodoListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

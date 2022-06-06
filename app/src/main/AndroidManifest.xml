@@ -21,6 +21,7 @@
             android:parentActivityName="MainActivity"
             android:exported="false" />
         <activity
+            android:configChanges="screenSize|orientation"
             android:name=".ScheduleActivity"
             android:parentActivityName="MainActivity"
             android:exported="false" />

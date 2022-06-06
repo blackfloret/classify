@@ -46,7 +46,7 @@
             android:textColor="@color/black"
             app:layout_constraintBottom_toTopOf="@+id/number_picker"
             app:layout_constraintEnd_toStartOf="@+id/priority_text"
-            app:layout_constraintHorizontal_bias="0.592"
+            app:layout_constraintHorizontal_bias="0.68"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/calendarView"
             app:layout_constraintVertical_bias="0.0" />
@@ -55,8 +55,8 @@
             android:id="@+id/timeView"
             android:layout_width="257dp"
             android:layout_height="153dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
             android:timePickerMode="spinner"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/time_text" />
@@ -76,7 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="4dp"
             android:gravity="center"
             android:text="Priority:"
             android:textColor="@color/black"

@@ -2,6 +2,7 @@ package com.example.classify
 
 import android.content.ContentValues
 import android.content.Context
+import android.content.res.Configuration
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.os.Bundle
@@ -11,6 +12,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import org.jetbrains.annotations.NotNull
 import java.time.LocalDate
 
 lateinit var SCHEDULE_ACTIVITY: ScheduleActivity
@@ -67,13 +69,7 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
             Log.d("schedule activity", "fab clicked!")
 
             dialfrag = EnterTodoDialogFragment.newInstance(this, TODO_LIST.size)
-            supportFragmentManager.beginTransaction().apply {
-                fabIsVisible = false
-                fab.isVisible = false
-                replace(R.id.TodoDialogFrag, dialfrag, "enter todo dialog frag")
-                commit()
-                Log.d("schedule activity", "inflated enter todo dialog")
-            }
+            dialfrag.show(supportFragmentManager, "inflate dial frag")
         }
 
         savedInstanceState?.let {
