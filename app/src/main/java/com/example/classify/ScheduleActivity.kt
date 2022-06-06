@@ -24,6 +24,7 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
     private lateinit var dialfrag: EnterTodoDialogFragment
     private lateinit var fab: FloatingActionButton
     private var prevTotalSteps = 0f
+    private var fabIsVisible: Boolean = true
 
 
     // Create a list of todos
@@ -64,22 +65,35 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
         recycler.layoutManager = LinearLayoutManager(this)
         Log.d("schedule activity", "inflated the recycler")
 
+        fabIsVisible = true
         fab = findViewById(R.id.fab)
         fab.setOnClickListener {
             Log.d("schedule activity", "fab clicked!")
 
             dialfrag = EnterTodoDialogFragment.newInstance(this, TODO_LIST.size)
             supportFragmentManager.beginTransaction().apply {
+                fabIsVisible = false
                 fab.isVisible = false
                 replace(R.id.TodoDialogFrag, dialfrag, "enter todo dialog frag")
                 commit()
                 Log.d("schedule activity", "inflated enter todo dialog")
             }
         }
+
+        savedInstanceState?.let {
+            fabIsVisible = it.getBoolean("fab") ?: false
+        }
+
+        if (fabIsVisible) {
+            fab.isVisible = true
+        } else {
+            fab.isVisible = false
+        }
     }
 
     // Preserve original values of balance and steps on changing activities
     override fun onSaveInstanceState(outState: Bundle) {
+        outState.putBoolean("fab", fabIsVisible)
         super.onSaveInstanceState(outState)
         with(sf.edit()) {
             putInt("balance", balance)
@@ -145,6 +159,7 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
         Log.d("TODO_LIST", "after insertionSort()")
         printList()
 
+        fabIsVisible = true
         fab.isVisible = true
         supportFragmentManager.beginTransaction().remove(dialfrag).commit()
 
@@ -197,7 +212,7 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
     }
 
     // Log TODO_LIST contents
-    private fun printList() {
+    fun printList() {
         for (count in 0..TODO_LIST.size-1) {
             Log.d("TODO_LIST contents", "Index $count: ${TODO_LIST[count].toString()}")
         }
