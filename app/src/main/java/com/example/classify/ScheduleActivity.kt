@@ -217,4 +217,12 @@ class ScheduleActivity : AppCompatActivity(), TodoListener, EnterTodoListener {
         printList()
         super.onStop()
     }
+
+    override fun onDestroy() {
+        database.clearDatabase()
+        database.insertAll()
+        Log.d("schedule activity", "ON STOP()")
+        printList()
+        super.onDestroy()
+    }
 }
